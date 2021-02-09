@@ -814,7 +814,8 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
-	if (selmon->lt[selmon->sellt]->arrange == monocle)
+	if (selmon->lt[selmon->sellt]->arrange == monocle || \
+      selmon->lt[selmon->sellt]->arrange == deck)
 		arrangemon(selmon);
 	drawbars();
 }

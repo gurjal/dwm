@@ -433,7 +433,7 @@ deck(Monitor *m)
 	int sx = 0, sy = 0, sh = 0, sw = 0;
 	float mfacts, sfacts;
 	int mrest, srest;
-	Client *c;
+	Client *c, *s;
 
 	getgaps(m, &oh, &ov, &ih, &iv, &n);
 	if (n == 0)
@@ -455,15 +455,27 @@ deck(Monitor *m)
 	getfacts(m, mh, sh, &mfacts, &sfacts, &mrest, &srest);
 
 	if (n - m->nmaster > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "D %d", n - m->nmaster);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[]%d", n - m->nmaster);
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
 			resize(c, mx, my, mw - (2*c->bw), (mh / mfacts) + (i < mrest ? 1 : 0) - (2*c->bw), 0);
 			my += HEIGHT(c) + ih;
-		} else {
-			resize(c, sx, sy, sw - (2*c->bw), sh - (2*c->bw), 0);
-		}
+		} 
+    else 
+			XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
+
+	for (s = m->stack; s; s = s->snext) {
+		if (!ISVISIBLE(s) || s->isfloating)
+			continue;
+
+		for (i = my = 0, c = nexttiled(m->clients); c && c != s; c = nexttiled(c->next), i++);
+		if (i < m->nmaster)
+			continue;
+		XMoveWindow(dpy, s->win, c->x, c->y);
+		resize(s, sx, sy, sw - (2*s->bw), sh - (2*s->bw), False);
+		break;
+	}
 }
 
 /*
