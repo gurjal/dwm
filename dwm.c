@@ -1120,7 +1120,7 @@ void
 monocle(Monitor *m)
 {
 	unsigned int n;
-	int oh, ov, ih, iv;
+	int oh, ov;
 	int mx, my, mh, mw;
 	Client *c;
 	unsigned int oe, ie;
@@ -1135,8 +1135,6 @@ monocle(Monitor *m)
 
 	oh = m->gappoh*oe; // outer horizontal gap
 	ov = m->gappov*oe; // outer vertical gap
-	ih = m->gappih*ie; // inner horizontal gap
-	iv = m->gappiv*ie; // inner vertical gap
 
 	mx = m->wx + ov;
 	my = m->wy + oh;
