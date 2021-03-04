@@ -4,7 +4,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int snap      = 0;       /* snap pixel */
+static const unsigned int snap      = 5;       /* snap pixel */
 static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
@@ -19,17 +19,30 @@ static const int swallowfloating    = 0;        /* 1 means swallow floating wind
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "Hack:size=10" };
-static const char dmenufont[]       = "Hack:size=10";
-static const char col_gray1[]       = "#181418";
-static const char col_gray2[]       = "#181418";
-static const char col_gray3[]       = "#d0d0d0";
-static const char col_gray4[]       = "#181418";
-static const char col_cyan[]        = "#5f865f";
+static const char *fonts[]          = { "Fira Mono:size=10" };
+static const char dmenufont[]       = "Fira Sans:size=10";
+static const char foreground[]      = "#d0d0d0";
+static const char background[]      = "#181418";
+static const char color0[]          = "#4e4e4e";
+static const char color1[]          = "#d68787";
+static const char color2[]          = "#5f865f";
+static const char color3[]          = "#d8af5f";
+static const char color4[]          = "#85add4";
+static const char color5[]          = "#d7afaf";
+static const char color6[]          = "#87afaf";
+static const char color7[]          = "#d0d0d0";
+static const char color8[]          = "#626262";
+static const char color9[]          = "#d75f87";
+static const char color10[]         = "#87af87";
+static const char color11[]         = "#ffd787";
+static const char color12[]         = "#add4fb";
+static const char color13[]         = "#ffafaf";
+static const char color14[]         = "#87d7d7";
+static const char color15[]         = "#e4e4e4";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { foreground, background, background },
+	[SchemeSel]  = { background, color2, color2  },
 };
 
 typedef struct {
@@ -54,8 +67,6 @@ static const Rule rules[] = {
 	{ NULL, "spterm", NULL,		             SPTAG(0),	1,          1,           0,        -1 },
 	{ "Spacefm", NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ "Pavucontrol", NULL, NULL,           0,         1,          0,           0,        -1 },
-	{ "Nitrogen", NULL,    NULL,           0,         1,          0,           0,        -1 },
-	{ "Virt-manager", NULL, NULL,          0,         1,          0,           0,        -1 },
 	{ "Qalculate-gtk", NULL, NULL,         0,         1,          0,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
@@ -75,6 +86,7 @@ static const Layout layouts[] = {
 	{ "[]D",      deck },
 	{ "[M]",      monocle },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "[-]",      centeredmaster },
 	{ NULL,       NULL },
 };
 
@@ -107,8 +119,9 @@ static const MonitorRule monrules[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+//static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", background, "-nf", foreground, "-sb", color4, "-sf", background, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
+static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[]  = { "brave", NULL };
 static const char *fileexplorercmd[]  = { "spacefm", NULL };
@@ -146,6 +159,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_r,      togglermaster,  {0} },
