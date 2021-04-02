@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <proc/readproc.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <X11/cursorfont.h>
@@ -210,6 +212,8 @@ static void clientmessage(XEvent *e);
 static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
+static char* checksshsession(pid_t process);
+static int checkparents(pid_t pid, pid_t target);
 static Monitor *createmon(void);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
@@ -226,6 +230,7 @@ static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
 static unsigned int getsystraywidth();
+static int getprocinfo(pid_t pid, proc_t *procinfo);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
@@ -265,6 +270,8 @@ static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void switchcol(const Arg *arg);
 static Monitor *systraytomon(Monitor *m);
+static void spawnsshaware(const Arg *arg);
+static int strtopid(char *s, pid_t *pid);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -339,6 +346,7 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static xcb_connection_t *xcon;
 
 static xcb_connection_t *xcon;
 
@@ -821,6 +829,62 @@ configurerequest(XEvent *e)
 	XSync(dpy, False);
 }
 
+int
+checkparents(pid_t pid, pid_t target)
+{
+	proc_t *pinf = calloc(1, sizeof(proc_t));
+	pid_t current = pid;
+
+	while(current!=(pid_t)0 && current!=(pid_t)1 && current!=target){
+		getprocinfo(current, pinf);
+		current = pinf->ppid;
+	}
+	freeproc(pinf);
+	if(current==target)
+		return 1;
+	return 0;
+}
+
+char*
+checksshsession(pid_t process)
+{
+	struct dirent *dp;
+	DIR *dfd;
+	const char *dir = "/proc";
+	char filename_qfd[100] ;
+	pid_t pid;
+	proc_t* process_info = calloc(1, sizeof(proc_t));
+	struct stat stbuf;
+	char* res = 0;
+
+	if ((dfd = opendir(dir)) == NULL) {
+		fprintf(stderr, "Can't open %s\n", dir);
+		freeproc(process_info);
+		return 0;
+	}
+
+	while ((dp = readdir(dfd)) != NULL && res == 0) {
+		sprintf( filename_qfd , "%s/%s",dir,dp->d_name);
+		if(stat(filename_qfd,&stbuf ) == -1) {
+			fprintf(stderr, "Unable to stat file: %s\n",filename_qfd);
+			continue;
+		}
+		if (((stbuf.st_mode & S_IFMT) == S_IFDIR) && strtopid(dp->d_name, &pid)) {
+			getprocinfo(pid, process_info);
+			if(!process_info->cmdline)
+				continue;
+			char* cmdline = *process_info->cmdline;
+			if(strncmp("ssh ", cmdline, 4) == 0 && checkparents(pid, process)){
+				res = calloc(strlen(cmdline)+1, sizeof(char));
+				strcpy(res, cmdline);
+			}
+		}
+	}
+	freeproc(process_info);
+	free(dfd);
+	return res;
+}
+
 Monitor *
 createmon(void)
 {
@@ -1167,6 +1231,19 @@ getsystraywidth()
 	if(showsystray)
 		for(i = systray->icons; i; w += i->w + systrayspacing, i = i->next) ;
 	return w ? w + systrayspacing : 1;
+}
+
+int
+getprocinfo(pid_t pid, proc_t *procinfo)
+{
+	int res = 1;
+	if(!procinfo)
+	return 0;
+	PROCTAB *pt_ptr = openproc(PROC_FILLARG | PROC_EDITCMDLCVT | PROC_FILLSTATUS | PROC_PID, &pid);
+	if(readproc(pt_ptr, procinfo))
+		res = 0;
+	closeproc(pt_ptr);
+	return res;
 }
 
 int
@@ -1996,6 +2073,38 @@ sigchld(int unused)
 }
 
 void
+spawnsshaware(const Arg *arg)
+{
+	if(selmon->sel) {
+		char* sshcmdline = checksshsession(selmon->sel->pid);
+		if(sshcmdline){
+			const char* sshcmd[] = {"st", "-e", "/bin/bash", "-c", sshcmdline, NULL};
+			Arg a = {.v=sshcmd};
+			spawn(&a);
+			free(sshcmdline);
+		}else{
+			spawn(arg);
+		}
+	}else{
+		spawn(arg);
+	}
+}
+
+int
+strtopid(char *s, pid_t *pid)
+{
+       long result = 0;
+       char *eptr;
+       if(!pid)
+               return 0;
+       result = strtol(s, &eptr, 10);
+       if((eptr && *eptr!='\0') || errno == ERANGE)
+               return 0;
+       *pid=(pid_t) result;
+       return 1;
+}
+
+void
 spawn(const Arg *arg)
 {
 	if (arg->v == dmenucmd)
@@ -2815,6 +2924,7 @@ wintomon(Window w)
 		return c->mon;
 	return selmon;
 }
+
 
 /* There's no way to check accesses to destroyed windows, thus those cases are
  * ignored (especially on UnmapNotify's). Other types of errors call Xlibs
