@@ -20,7 +20,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
-static const char dmenufont[]       = "Fira Sans:size=10";
+static const char dmenufont[]       = "Fira Mono:size=10";
 static const char foreground[]      = "#d0d0d0";
 static const char background[]      = "#181418";
 static const char color0[]          = "#4e4e4e";
@@ -123,33 +123,38 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[]  = { "librewolf", NULL };
+static const char *browsercmd[]  = { "brave-nightly", NULL };
 static const char *fileexplorercmd[]  = { "spacefm", NULL };
-static const char *qalccmd[]  = { "qalculate-gtk", NULL };
+static const char *virtmanagercmd[]  = { "virt-manager", NULL };
+//static const char *qalccmd[]  = { "qalculate-gtk", NULL };
+static const char *pavucontrolcmd[]  = { "pavucontrol", NULL };
 static const char *downvol[]  = { "pamixer", "-d", "5", NULL };
 static const char *upvol[]    = { "pamixer", "-i", "5", NULL };
+static const char *takescreencmd[]  = { "takeScreen", NULL };
 
 #include "movestack.c"
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd } },
-	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
-	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = qalccmd } },
-	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = downvol } },
-	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = upvol   } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd} },
+	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd} },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd} },
+	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd} },
+	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd} },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = virtmanagercmd} },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = pavucontrolcmd} },
+	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = downvol} },
+	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = upvol} },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = takescreencmd} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_j,      focusstack,     {.i = +1} },
+	{ MODKEY,                       XK_k,      focusstack,     {.i = -1} },
+	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1} },
+	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1} },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1} },
+	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_g,      togglegaps,     {0} },
 	{ MODKEY,                       XK_Tab,    switchcol,      {0} },

@@ -3,8 +3,8 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int snap      = 5;       /* snap pixel */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int snap      = 10;       /* snap pixel */
 static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
@@ -20,7 +20,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
-static const char dmenufont[]       = "Fira Sans:size=10";
+static const char dmenufont[]       = "Fira Mono:size=10";
 static const char foreground[]      = "#d0d0d0";
 static const char background[]      = "#181418";
 static const char color0[]          = "#4e4e4e";
@@ -124,8 +124,10 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[]  = { "brave", NULL };
+static const char *virtmanagercmd[]  = { "virt-manager", NULL };
 static const char *fileexplorercmd[]  = { "spacefm", NULL };
-static const char *qalccmd[]  = { "qalculate-gtk", NULL };
+static const char *pavucontrolcmd[]  = { "pavucontrol", NULL };
+static const char *takescreencmd[]  = { "takeScreen", NULL };
 static const char *downvol[]  = { "pamixer", "-d", "5", NULL };
 static const char *upvol[]    = { "pamixer", "-i", "5", NULL };
 
@@ -137,8 +139,10 @@ static Key keys[] = {
 	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd } },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = virtmanagercmd} },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
-	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = qalccmd } },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = pavucontrolcmd} },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = takescreencmd} },
 	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = downvol } },
 	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = upvol   } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
