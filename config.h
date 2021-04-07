@@ -21,28 +21,28 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
 static const char dmenufont[]       = "Fira Mono:size=10";
-static const char foreground[]      = "#d0d0d0";
-static const char background[]      = "#181418";
-static const char color0[]          = "#4e4e4e";
-static const char color1[]          = "#d68787";
-static const char color2[]          = "#5f865f";
-static const char color3[]          = "#d8af5f";
-static const char color4[]          = "#85add4";
-static const char color5[]          = "#d7afaf";
-static const char color6[]          = "#87afaf";
-static const char color7[]          = "#d0d0d0";
-static const char color8[]          = "#626262";
-static const char color9[]          = "#d75f87";
-static const char color10[]         = "#87af87";
-static const char color11[]         = "#ffd787";
-static const char color12[]         = "#add4fb";
-static const char color13[]         = "#ffafaf";
-static const char color14[]         = "#87d7d7";
-static const char color15[]         = "#e4e4e4";
+static const char foreground[]      = "#D8DEE9";
+static const char background[]      = "#2E3440";
+static const char color0[]          = "#3B4252";
+static const char color1[]          = "#BF616A";
+static const char color2[]          = "#A3BE8C";
+static const char color3[]          = "#EBCB8B";
+static const char color4[]          = "#81A1C1";
+static const char color5[]          = "#B48EAD";
+static const char color6[]          = "#88C0D0";
+static const char color7[]          = "#E5E9F0";
+static const char color8[]          = "#4C566A";
+static const char color9[]          = "#BF616A";
+static const char color10[]         = "#A3BE8C";
+static const char color11[]         = "#EBCB8B";
+static const char color12[]         = "#81A1C1";
+static const char color13[]         = "#B48EAD";
+static const char color14[]         = "#8FBCBB";
+static const char color15[]         = "#ECEFF4";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { foreground, background, background },
-	[SchemeSel]  = { background, color2, color2  },
+	[SchemeSel]  = { background, color4, color4  },
 };
 
 typedef struct {
@@ -67,7 +67,7 @@ static const Rule rules[] = {
 	{ NULL, "spterm", NULL,		             SPTAG(0),	1,          1,           0,        -1 },
 	{ "Spacefm", NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ "Pavucontrol", NULL, NULL,           0,         1,          0,           0,        -1 },
-	{ "Qalculate-gtk", NULL, NULL,         0,         1,          0,           0,        -1 },
+	{ "gammy", NULL, NULL,                 0,         1,          0,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -123,7 +123,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[]  = { "brave", NULL };
+static const char *browsercmd[]  = { "brave-nightly", NULL };
 static const char *virtmanagercmd[]  = { "virt-manager", NULL };
 static const char *fileexplorercmd[]  = { "spacefm", NULL };
 static const char *pavucontrolcmd[]  = { "pavucontrol", NULL };

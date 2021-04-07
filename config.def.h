@@ -21,24 +21,24 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
 static const char dmenufont[]       = "Fira Mono:size=10";
-static const char foreground[]      = "#d0d0d0";
-static const char background[]      = "#181418";
-static const char color0[]          = "#4e4e4e";
-static const char color1[]          = "#d68787";
-static const char color2[]          = "#5f865f";
-static const char color3[]          = "#d8af5f";
-static const char color4[]          = "#85add4";
-static const char color5[]          = "#d7afaf";
-static const char color6[]          = "#87afaf";
-static const char color7[]          = "#d0d0d0";
-static const char color8[]          = "#626262";
-static const char color9[]          = "#d75f87";
-static const char color10[]         = "#87af87";
-static const char color11[]         = "#ffd787";
-static const char color12[]         = "#add4fb";
-static const char color13[]         = "#ffafaf";
-static const char color14[]         = "#87d7d7";
-static const char color15[]         = "#e4e4e4";
+static const char foreground[]      = "#F8F8F2";
+static const char background[]      = "#282A36";
+static const char color0[]          = "#000000";
+static const char color1[]          = "#FF5555";
+static const char color2[]          = "#50FA7B";
+static const char color3[]          = "#F1FA8C";
+static const char color4[]          = "#BD93F9";
+static const char color5[]          = "#FF79C6";
+static const char color6[]          = "#8BE9FD";
+static const char color7[]          = "#BFBFBF";
+static const char color8[]          = "#4D4D4D";
+static const char color9[]          = "#FF6E67";
+static const char color10[]         = "#5AF78E";
+static const char color11[]         = "#F4F99D";
+static const char color12[]         = "#CAA9FA";
+static const char color13[]         = "#FF92D0";
+static const char color14[]         = "#9AEDFE";
+static const char color15[]         = "#E6E6E6";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { foreground, background, background },
@@ -67,7 +67,7 @@ static const Rule rules[] = {
 	{ NULL, "spterm", NULL,		             SPTAG(0),	1,          1,           0,        -1 },
 	{ "Spacefm", NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ "Pavucontrol", NULL, NULL,           0,         1,          0,           0,        -1 },
-	{ "Qalculate-gtk", NULL, NULL,         0,         1,          0,           0,        -1 },
+	{ "gammy", NULL, NULL,                 0,         1,          0,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -137,8 +137,8 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd } },
-	{ MODKEY|ShiftMask,       	    XK_Return, spawnsshaware,  {.v = termcmd } },
-	//{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ ShiftMask,       	            XK_Return, spawnsshaware,  {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = virtmanagercmd} },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
