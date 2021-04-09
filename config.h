@@ -3,13 +3,13 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 10;       /* snap pixel */
 static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
-static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 5;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 5;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 5;       /* vert outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -42,7 +42,7 @@ static const char color15[]         = "#ECEFF4";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { foreground, background, background },
-	[SchemeSel]  = { background, color4, color4  },
+	[SchemeSel]  = { background, color5, color5  },
 };
 
 typedef struct {
@@ -119,8 +119,7 @@ static const MonitorRule monrules[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-//static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", background, "-nf", foreground, "-sb", color4, "-sf", background, NULL };
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", background, "-nf", foreground, "-sb", color5, "-sf", background, "-shb", color2, NULL };
 static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[]  = { "brave-nightly", NULL };
@@ -137,8 +136,8 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd } },
-	{ ShiftMask,       	            XK_Return, spawnsshaware,  {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,       	    XK_Return, spawnsshaware,  {.v = termcmd } },
+	//{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = virtmanagercmd} },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
