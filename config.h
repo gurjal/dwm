@@ -86,7 +86,8 @@ static const Layout layouts[] = {
 	{ "[]D",      deck },
 	{ "[M]",      monocle },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[-]",      centeredmaster },
+	{ "[=]",      centeredmaster },
+	{ "[>]",      centeredfloatingmaster },
 	{ NULL,       NULL },
 };
 
@@ -97,8 +98,6 @@ static const Layout layouts[] = {
 //	{ "###",      nrowgrid },
 //	{ "---",      horizgrid },
 //	{ ":::",      gaplessgrid },
-//	{ "|M|",      centeredmaster },
-//	{ ">M>",      centeredfloatingmaster },
 
 static const MonitorRule monrules[] = {
 	/* monitor  tag  layout  mfact  nmaster  showbar  topbar */
@@ -137,7 +136,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = passcmd } },
 	{ MODKEY|ShiftMask,       	    XK_Return, spawnsshaware,  {.v = termcmd } },
-	//{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = virtmanagercmd} },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = fileexplorercmd } },
@@ -163,7 +161,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[4]} },
-	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_v,      setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[6]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_r,      togglermaster,  {0} },
