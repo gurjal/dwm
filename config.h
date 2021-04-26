@@ -22,7 +22,7 @@ static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
 static const char dmenufont[]       = "Fira Mono:size=10";
 static const char foreground[]      = "#d0d0d0";
-static const char background[]      = "#181418";
+static const char background[]      = "#282428";
 static const char color0[]          = "#4e4e4e";
 static const char color1[]          = "#d68787";
 static const char color2[]          = "#5f865f";
