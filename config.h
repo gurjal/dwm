@@ -6,10 +6,10 @@
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 10;       /* snap pixel */
 static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
-static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 5;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 5;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 5;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -21,24 +21,24 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[]          = { "Fira Mono:size=10" };
 static const char dmenufont[]       = "Fira Mono:size=10";
-static const char foreground[]      = "#D8DEE9";
-static const char background[]      = "#2E3440";
-static const char color0[]          = "#3B4252";
-static const char color1[]          = "#BF616A";
-static const char color2[]          = "#A3BE8C";
-static const char color3[]          = "#EBCB8B";
-static const char color4[]          = "#81A1C1";
-static const char color5[]          = "#B48EAD";
-static const char color6[]          = "#88C0D0";
-static const char color7[]          = "#E5E9F0";
-static const char color8[]          = "#4C566A";
-static const char color9[]          = "#BF616A";
-static const char color10[]         = "#A3BE8C";
-static const char color11[]         = "#EBCB8B";
-static const char color12[]         = "#81A1C1";
-static const char color13[]         = "#B48EAD";
-static const char color14[]         = "#8FBCBB";
-static const char color15[]         = "#ECEFF4";
+static const char foreground[]      = "#d0d0d0";
+static const char background[]      = "#181418";
+static const char color0[]          = "#4e4e4e";
+static const char color1[]          = "#d68787";
+static const char color2[]          = "#5f865f";
+static const char color3[]          = "#d8af5f";
+static const char color4[]          = "#85add4";
+static const char color5[]          = "#d7afaf";
+static const char color6[]          = "#87afaf";
+static const char color7[]          = "#d0d0d0";
+static const char color8[]          = "#626262";
+static const char color9[]          = "#d75f87";
+static const char color10[]         = "#87af87";
+static const char color11[]         = "#ffd787";
+static const char color12[]         = "#add4fb";
+static const char color13[]         = "#ffafaf";
+static const char color14[]         = "#87d7d7";
+static const char color15[]         = "#e4e4e4";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { foreground, background, background },
@@ -121,13 +121,14 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", background, "-nf", foreground, "-sb", color5, "-sf", background, "-shb", color2, NULL };
 static const char *passcmd[] = { "passmenu", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[]  = { "brave-nightly", NULL };
+static const char *browsercmd[]  = { "brave", NULL };
 static const char *virtmanagercmd[]  = { "virt-manager", NULL };
 static const char *fileexplorercmd[]  = { "spacefm", NULL };
 static const char *pavucontrolcmd[]  = { "pavucontrol", NULL };
 static const char *takescreencmd[]  = { "takeScreen", NULL };
 static const char *downvol[]  = { "pamixer", "-d", "5", NULL };
 static const char *upvol[]    = { "pamixer", "-i", "5", NULL };
+static const char *mutevol[]    = { "pamixer", "-t", NULL };
 
 #include "movestack.c"
 
@@ -143,6 +144,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = takescreencmd} },
 	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = downvol } },
 	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = upvol   } },
+	{ 0,         XF86XK_AudioMute,      spawn,          {.v = mutevol   } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
