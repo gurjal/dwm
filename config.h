@@ -144,7 +144,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = takescreencmd} },
 	{ 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = downvol } },
 	{ 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = upvol   } },
-	{ 0,         XF86XK_AudioMute,      spawn,          {.v = mutevol   } },
+	{ 0,                XF86XK_AudioMute,      spawn,          {.v = mutevol   } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
