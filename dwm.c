@@ -157,6 +157,7 @@ static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
 static Monitor *createmon(void);
+static void deck(Monitor *m);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
@@ -646,6 +647,43 @@ createmon(void)
 }
 
 void
+deck(Monitor *m) {
+	unsigned int i, n, h, mw, my;
+	Client *c, *s;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n == 0)
+		return;
+
+	if (n > m->nmaster) {
+		mw = m->nmaster ? m->ww * m->mfact : 0;
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n - m->nmaster);
+	}
+	else
+		mw = m->ww;
+	for (i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i < m->nmaster) {
+			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
+			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			my += HEIGHT(c);
+		}
+		else
+			XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
+
+	for (s = m->stack; s; s = s->snext) {
+		if (!ISVISIBLE(s) || s->isfloating)
+			continue;
+
+		for (i = my = 0, c = nexttiled(m->clients); c && c != s; c = nexttiled(c->next), i++);
+		if (i < m->nmaster)
+			continue;
+		XMoveWindow(dpy, s->win, c->x, c->y);
+		resize(s, m->wx + mw, m->wy, m->ww - mw - (2*s->bw), m->wh - (2*s->bw), False);
+		break;
+	}
+}
+
+void
 destroynotify(XEvent *e)
 {
 	Client *c;
@@ -806,6 +844,8 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
+	if (selmon->lt[selmon->sellt]->arrange == deck)
+		arrangemon(selmon);
 	drawbars();
 }
 
