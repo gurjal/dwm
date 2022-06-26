@@ -148,6 +148,7 @@ typedef struct {
 	int monitor;
 	int tag;
 	int layout;
+	int rmaster;
 	float mfact;
 	int nmaster;
 	int showbar;
@@ -289,13 +290,11 @@ static Window root, wmcheckwin;
 struct Pertag {
 	unsigned int curtag, prevtag; /* current and previous tag */
 	int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
+	int rmasters[LENGTH(tags) + 1]; /* orientation of master area */
 	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
 	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
-	#if ZOOMSWAP_PATCH
-	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
-	#endif // ZOOMSWAP_PATCH
 };
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
@@ -663,9 +662,9 @@ createmon(void)
 	const MonitorRule *mr;
 	m = ecalloc(1, sizeof(Monitor));
 	m->tagset[0] = m->tagset[1] = 1;
+	m->rmaster = rmaster;
 	m->mfact = mfact;
 	m->nmaster = nmaster;
-	m->rmaster = rmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
 
@@ -681,6 +680,8 @@ createmon(void)
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
 			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof m->ltsymbol);
 
+			if (mr->rmaster > -1)
+				m->rmaster = mr->rmaster;
 			if (mr->mfact > -1)
 				m->mfact = mr->mfact;
 			if (mr->nmaster > -1)
@@ -704,10 +705,6 @@ createmon(void)
 		/* init showbar */
 		m->pertag->showbars[i] = m->showbar;
 
-		#if ZOOMSWAP_PATCH
-		m->pertag->prevzooms[i] = NULL;
-		#endif // ZOOMSWAP_PATCH
-
 		for (j = 0; j < LENGTH(monrules); j++) {
 			mr = &monrules[j];
 			if ((mr->monitor == -1 || mr->monitor == mi) && (mr->tag == -1 || mr->tag == i)) {
@@ -716,6 +713,7 @@ createmon(void)
 				m->pertag->ltidxs[i][0] = &layouts[layout];
 				m->pertag->ltidxs[i][1] = m->lt[0];
 				m->pertag->nmasters[i] = (mr->nmaster > -1 ? mr->nmaster : m->nmaster);
+				m->pertag->rmasters[i] = (mr->rmaster > -1 ? mr->rmaster : m->rmaster);
 				m->pertag->mfacts[i] = (mr->mfact > -1 ? mr->mfact : m->mfact);
 				m->pertag->showbars[i] = (mr->showbar > -1 ? mr->showbar : m->showbar);
 				break;
@@ -1815,9 +1813,9 @@ togglefloating(const Arg *arg)
 void
 togglermaster(const Arg *arg)
 {
-	selmon->rmaster = !selmon->rmaster;
+	selmon->rmaster = selmon->pertag->rmasters[selmon->pertag->curtag] = !selmon->rmaster;
 	/* now mfact represents the left factor */
-	selmon->mfact = 1.0 - selmon->mfact;
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = 1.0 - selmon->mfact;
 	if (selmon->lt[selmon->sellt]->arrange)
 		arrange(selmon);
 }
@@ -1858,6 +1856,7 @@ toggleview(const Arg *arg)
 
 		/* apply settings for this view */
 		selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+		selmon->rmaster = selmon->pertag->rmasters[selmon->pertag->curtag];
 		selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
 		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
@@ -2179,6 +2178,7 @@ view(const Arg *arg)
 		selmon->pertag->curtag = tmptag;
 	}
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+	selmon->rmaster = selmon->pertag->rmasters[selmon->pertag->curtag];
 	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
 	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
