@@ -1,3 +1,4 @@
 dwm
 *.o
-patcher
+_patcher
+config.h
