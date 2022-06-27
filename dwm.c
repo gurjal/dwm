@@ -727,7 +727,8 @@ createmon(void)
 }
 
 void
-deck(Monitor *m) {
+deck(Monitor *m)
+{
 	unsigned int i, n, h, mw, my;
 	Client *c, *s;
 
@@ -736,7 +737,9 @@ deck(Monitor *m) {
 		return;
 
 	if (n > m->nmaster) {
-		mw = m->nmaster ? m->ww * m->mfact : 0;
+		mw = m->nmaster // rmaster support
+			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)
+			: 0;
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n - m->nmaster);
 	}
 	else
@@ -744,21 +747,21 @@ deck(Monitor *m) {
 	for (i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
 			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
-			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			resize(c, m->rmaster ? m->wx + m->ww - mw : m->wx, // rmaster support
+          m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
 			my += HEIGHT(c);
 		}
 		else
 			XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
-
 	for (s = m->stack; s; s = s->snext) {
 		if (!ISVISIBLE(s) || s->isfloating)
 			continue;
-
 		for (i = my = 0, c = nexttiled(m->clients); c && c != s; c = nexttiled(c->next), i++);
 		if (i < m->nmaster)
 			continue;
 		XMoveWindow(dpy, s->win, c->x, c->y);
-		resize(s, m->wx + mw, m->wy, m->ww - mw - (2*s->bw), m->wh - (2*s->bw), False);
+		resize(s, m->rmaster ? m->wx : m->wx + mw, m->wy, // rmaster support
+        m->ww - mw - (2*s->bw), m->wh - (2*s->bw), 0);
 		break;
 	}
 }
