@@ -1,7 +1,7 @@
 /*
-* dwm/themes/tokyo_night.h
-*
-*/
+ * dwm/themes/tokyo_night.h
+ *
+ */
 
 // black         "#16161e"
 // pale blue     "#9aa5ce"
@@ -11,7 +11,7 @@
 // red           "#f7768e"
 // green         "#9ece6a"
 
-static const char normal_fg[] = "#9aa5ce";
+static const char normal_fg[] = "#787c99";
 static const char normal_bg[] = "#16161e";
 static const char normal_bd[] = "#16161e";
 static const char select_fg[] = "#c0caf5";

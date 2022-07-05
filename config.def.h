@@ -92,8 +92,8 @@ static const char *pascmd[] = {
   normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL};
 static const char *tercmd[] = { "st", NULL };
-static const char *brwcmd[] = { "firefox", NULL };
-static const char *prwcmd[] = { "firefox", "--private-window", NULL };
+static const char *brwcmd[] = { "firefox-developer-edition", NULL };
+static const char *prwcmd[] = { "firefox-developer-edition", "--private-window", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *expcmd[] = { "pcmanfm", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
