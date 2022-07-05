@@ -156,6 +156,7 @@ struct Monitor {
 	int rmaster;
 	int showbar;
 	int topbar;
+	Client *prevzoom;
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -310,7 +311,6 @@ static pid_t winpid(Window w);
 static Systray *systray = NULL;
 static unsigned long systrayorientation = _NET_SYSTEM_TRAY_ORIENTATION_HORZ;
 static Client *lastfocused = NULL;
-static Client *prevzoom = NULL;
 static const char broken[] = "broken";
 static char stext[256];
 static int screen;
@@ -356,6 +356,7 @@ struct Pertag {
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
 	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
 };
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
@@ -864,6 +865,9 @@ createmon(void)
 
 		/* init showbar */
 		m->pertag->showbars[i] = m->showbar;
+
+		/* init zoomswap */
+		m->pertag->prevzooms[i] = NULL;
 
 		for (j = 0; j < LENGTH(monrules); j++) {
 			mr = &monrules[j];
@@ -2728,6 +2732,7 @@ view(const Arg *arg)
 	selmon->rmaster = selmon->pertag->rmasters[selmon->pertag->curtag];
 	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
 	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+  selmon->prevzoom = selmon->pertag->prevzooms[selmon->pertag->curtag];
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
@@ -2968,11 +2973,11 @@ zoom(const Arg *arg)
 	|| (selmon->sel && selmon->sel->isfloating))
 		return;
 	if (c == nexttiled(selmon->clients)) {
-		at = findbefore(prevzoom);
+		at = findbefore(selmon->prevzoom);
 		if (at)
 			cprevious = nexttiled(at->next);
-		if (!cprevious || cprevious != prevzoom) {
-			prevzoom = NULL;
+		if (!cprevious || cprevious != selmon->prevzoom) {
+			selmon->prevzoom = selmon->pertag->prevzooms[selmon->pertag->curtag] = NULL;
 			if (!c || !(c = nexttiled(c->next)))
 				return;
 		} else
@@ -2985,7 +2990,7 @@ zoom(const Arg *arg)
 	attach(c);
 	/* swap windows instead of pushing the previous one down */
 	if (c != cold && at) {
-		prevzoom = cold;
+		selmon->prevzoom = selmon->pertag->prevzooms[selmon->pertag->curtag] = cold;
 		if (cold && at != cold) {
 			detach(cold);
 			cold->next = at->next;
