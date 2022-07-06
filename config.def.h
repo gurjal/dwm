@@ -92,6 +92,7 @@ static const char *pascmd[] = {
   normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL};
 static const char *tercmd[] = { "st", NULL };
+static const char *tabcmd[] = { "tabbed", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox-developer-edition", NULL };
 static const char *prwcmd[] = { "firefox-developer-edition", "--private-window", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
@@ -110,7 +111,7 @@ static Key keys[] = {
   /* modifier                     key        function        argument */
   { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
   { MODKEY,                       XK_s,      spawn,          {.v = pascmd } },
-  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd } },
+  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tabcmd } },
   { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd } },
   { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prwcmd } },
   { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd } },
