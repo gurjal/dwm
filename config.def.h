@@ -92,7 +92,7 @@ static const char *pascmd[] = {
   normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL};
 static const char *tercmd[] = { "st", NULL };
-static const char *tabcmd[] = { "tabbed", "-c", "-r", "2", "st", "-w", "''", NULL };
+static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox-developer-edition", NULL };
 static const char *prwcmd[] = { "firefox-developer-edition", "--private-window", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
