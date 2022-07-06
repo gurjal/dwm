@@ -1,8 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h>
 
-#include "themes/nord.h"
-#define _CENTRETITLE 1
+#include "themes/embark.h"
+#define _CENTRETITLE 0
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -16,8 +16,8 @@ static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:style=Regular:pixelsize=14:antialias=true:hinting=true" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:style=Regular:pixelsize=14:antialias=true:hinting=true";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -186,9 +186,11 @@ static Button buttons[] = {
   { ClkTagBar,            0,              Button1,        view,           {0} },
   { ClkTagBar,            0,              Button2,        tag,            {0} },
   { ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkClientWin,         0,              8,              resizemouse,    {0} },
 	{ ClkClientWin,         0,              9,              movemouse,      {0} },
+	{ ClkClientWin,         0,              8,              resizemouse,    {0} },
+	{ ClkClientWin,         MODKEY,         9,              dragmfact,      {0} },
   { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
   { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
   { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask, Button1,      dragmfact,      {0} },
 };
