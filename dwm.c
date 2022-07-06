@@ -2317,9 +2317,12 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+
+	if (lastfocused == c)
+		lastfocused = NULL;
 	free(c);
 
-	if (!s) {
+  if (!s) {
 		arrange(m);
 		focus(NULL);
 		updateclientlist();
