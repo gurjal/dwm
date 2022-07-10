@@ -28,8 +28,8 @@ typedef struct {
   const char *name;
   const void *cmd;
 } Sp;
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "80x24", NULL };
-const char *spcmd2[] = {"st", "-n", "spmixer", "-g", "80x24", "-e", "pulsemixer", NULL };
+const char *spcmd1[] = {"st", "-n", "spterm", "-g", "100x30", NULL };
+const char *spcmd2[] = {"st", "-n", "spmixer", "-g", "100x30", "-e", "pulsemixer", NULL };
 static Sp scratchpads[] = {
   /* name          cmd  */
   {"spterm",      spcmd1},
@@ -175,7 +175,7 @@ static Button buttons[] = {
   /* click                event mask      button          function        argument */
   { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
   { ClkLtSymbol,          0,              Button2,        setlayout,      {.v = &layouts[2]} },
-  { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[3]} },
+  { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[4]} },
   { ClkWinTitle,          0,              Button1,        zoom,           {0} },
   { ClkWinTitle,          0,              Button2,        killclient,     {0} },
   { ClkWinTitle,          0,              Button3,        togglefloating, {0} },
