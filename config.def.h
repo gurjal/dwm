@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h>
 
-#include "themes/embark.h"
+#include "themes/nord.h"
 #define _CENTRETITLE 0
 
 /* appearance */
@@ -45,6 +45,7 @@ static const Rule rules[] = {
    */
   /* class     instance   title           tags mask  isfloating  isterminal  noswallow  monitor */
   { "st-256color", NULL,  NULL,           0,         0,          1,           0,        -1 },
+  { "tabbed",  NULL,      NULL,           0,         0,          1,           0,        -1 },
   { NULL,      "spterm",  NULL,           SPTAG(0),  1,          1,           0,        -1 },
   { NULL,      "spmixer", NULL,           SPTAG(1),  1,          0,           0,        -1 },
   { NULL,      NULL,      "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
@@ -93,8 +94,8 @@ static const char *pascmd[] = {
   select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL};
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
-static const char *brwcmd[] = { "firefox-developer-edition", NULL };
-static const char *prwcmd[] = { "firefox-developer-edition", "--private-window", NULL };
+static const char *brwcmd[] = { "firefox", NULL };
+static const char *prwcmd[] = { "firefox", "--private-window", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *expcmd[] = { "pcmanfm", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
