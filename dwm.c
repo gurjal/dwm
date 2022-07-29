@@ -312,7 +312,6 @@ static pid_t winpid(Window w);
 /* variables */
 static Systray *systray = NULL;
 static unsigned long systrayorientation = _NET_SYSTEM_TRAY_ORIENTATION_HORZ;
-static Client *lastfocused = NULL;
 static const char broken[] = "broken";
 static char stext[256];
 static int screen;
@@ -1324,11 +1323,7 @@ focus(Client *c)
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, 1);
-		/* set new focused border first to avoid flickering */
 		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
-		/* lastfocused may be us if another window was unmanaged */
-		if (lastfocused && lastfocused != c)
-			XSetWindowBorder(dpy, lastfocused->win, scheme[SchemeNorm][ColBorder].pixel);
 		setfocus(c);
 	} else {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
@@ -2504,7 +2499,7 @@ unfocus(Client *c, int setfocus)
 	if (!c)
 		return;
 	grabbuttons(c, 0);
-	lastfocused = c;
+	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
@@ -2545,8 +2540,6 @@ unmanage(Client *c, int destroyed)
 		XUngrabServer(dpy);
 	}
 
-	if (lastfocused == c)
-		lastfocused = NULL;
 	free(c);
 
   if (!s) {
