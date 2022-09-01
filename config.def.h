@@ -16,8 +16,8 @@ static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true";
+static const char *fonts[]          = { "Fira Code:style=Regular:pixelsize=16:antialias=true:hinting=true" };
+static const char dmenufont[]       = "Fira Code:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -30,10 +30,12 @@ typedef struct {
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "100x30", NULL };
 const char *spcmd2[] = {"st", "-n", "spmixer", "-g", "100x30", "-e", "pulsemixer", NULL };
+const char *spcmd3[] = {"st", "-n", "spconn", "-g", "100x30", "-e", "connmanctl", NULL };
 static Sp scratchpads[] = {
   /* name          cmd  */
   {"spterm",      spcmd1},
   {"spmixer",     spcmd2},
+  {"spconn",      spcmd3},
 };
 
 /* tagging */
@@ -48,6 +50,7 @@ static const Rule rules[] = {
   { "tabbed",  NULL,      NULL,           0,         0,          1,           0,        -1 },
   { NULL,      "spterm",  NULL,           SPTAG(0),  1,          1,           0,        -1 },
   { NULL,      "spmixer", NULL,           SPTAG(1),  1,          0,           0,        -1 },
+  { NULL,      "spconn",  NULL,           SPTAG(2),  1,          0,           0,        -1 },
   { NULL,      NULL,      "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -150,6 +153,7 @@ static Key keys[] = {
   { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
   { MODKEY,                       XK_grave,  togglescratch,  {.ui = 0 } },
   { MODKEY|ShiftMask,             XK_m,      togglescratch,  {.ui = 1 } },
+  { MODKEY|ShiftMask,             XK_n,      togglescratch,  {.ui = 2 } },
   { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
   { MODKEY,                       XK_period, focusmon,       {.i = +1 } },
   { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
@@ -184,16 +188,16 @@ static Button buttons[] = {
   { ClkStatusText,        0,              Button1,        spawn,          {.v = expcmd } },
   { ClkStatusText,        0,              Button2,        spawn,          {.v = tercmd } },
   { ClkStatusText,        0,              Button3,        spawn,          {.v = brwcmd } },
-	{ ClkStatusText,        0,              Button4,        spawn,          {.v = incvol } },
-	{ ClkStatusText,        0,              Button5,        spawn,          {.v = decvol } },
+  { ClkStatusText,        0,              Button4,        spawn,          {.v = incvol } },
+  { ClkStatusText,        0,              Button5,        spawn,          {.v = decvol } },
   { ClkTagBar,            0,              Button1,        view,           {0} },
   { ClkTagBar,            0,              Button2,        tag,            {0} },
   { ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkClientWin,         0,              9,              movemouse,      {0} },
-	{ ClkClientWin,         0,              8,              resizemouse,    {0} },
-	{ ClkClientWin,         MODKEY,         9,              dragmfact,      {0} },
+  /* { ClkClientWin,         0,              9,              movemouse,      {0} }, */
+  /* { ClkClientWin,         0,              8,              resizemouse,    {0} }, */
+  { ClkClientWin,         MODKEY,         9,              dragmfact,      {0} },
   { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
   { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
   { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkClientWin,         MODKEY|ShiftMask, Button1,      dragmfact,      {0} },
+  { ClkClientWin,         MODKEY|ShiftMask, Button1,      dragmfact,      {0} },
 };
