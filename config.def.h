@@ -16,8 +16,8 @@ static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "Fira Code:style=Regular:pixelsize=16:antialias=true:hinting=true" };
-static const char dmenufont[]       = "Fira Code:style=Regular:pixelsize=16:antialias=true:hinting=true";
+static const char *fonts[]          = { "FiraCode Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true" };
+static const char dmenufont[]       = "FiraCode Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -31,11 +31,13 @@ typedef struct {
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "100x30", NULL };
 const char *spcmd2[] = {"st", "-n", "spmixer", "-g", "100x30", "-e", "pulsemixer", NULL };
 const char *spcmd3[] = {"st", "-n", "spconn", "-g", "100x30", "-e", "connmanctl", NULL };
+const char *spcmd4[] = {"st", "-n", "spspot", "-g", "100x30", "-e", "spotify-tui", NULL };
 static Sp scratchpads[] = {
   /* name          cmd  */
   {"spterm",      spcmd1},
   {"spmixer",     spcmd2},
   {"spconn",      spcmd3},
+  {"spspot",      spcmd4},
 };
 
 /* tagging */
@@ -47,10 +49,11 @@ static const Rule rules[] = {
    */
   /* class     instance   title           tags mask  isfloating  isterminal  noswallow  monitor */
   { "st-256color", NULL,  NULL,           0,         0,          1,           0,        -1 },
-  { "tabbed",  NULL,      NULL,           0,         0,          1,           0,        -1 },
+  { "tabbed",  NULL,      NULL,           0,         0,          0,           0,        -1 },
   { NULL,      "spterm",  NULL,           SPTAG(0),  1,          1,           0,        -1 },
   { NULL,      "spmixer", NULL,           SPTAG(1),  1,          0,           0,        -1 },
   { NULL,      "spconn",  NULL,           SPTAG(2),  1,          0,           0,        -1 },
+  { NULL,      "spspot",  NULL,           SPTAG(3),  1,          0,           0,        -1 },
   { NULL,      NULL,      "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -99,7 +102,7 @@ static const char *pascmd[] = {
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox", NULL };
-static const char *prwcmd[] = { "firefox", "--private-window", NULL };
+static const char *prwcmd[] = { "firefox_private", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *expcmd[] = { "pcmanfm", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
@@ -116,7 +119,8 @@ static Key keys[] = {
   /* modifier                     key        function        argument */
   { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
   { MODKEY,                       XK_s,      spawn,          {.v = pascmd } },
-  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tabcmd } },
+  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd } },
+  { MODKEY|ControlMask|ShiftMask, XK_Return, spawn,          {.v = tabcmd } },
   { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd } },
   { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prwcmd } },
   { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd } },
@@ -154,6 +158,7 @@ static Key keys[] = {
   { MODKEY,                       XK_grave,  togglescratch,  {.ui = 0 } },
   { MODKEY|ShiftMask,             XK_m,      togglescratch,  {.ui = 1 } },
   { MODKEY|ShiftMask,             XK_n,      togglescratch,  {.ui = 2 } },
+  { MODKEY|ShiftMask,             XK_a,      togglescratch,  {.ui = 3 } },
   { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
   { MODKEY,                       XK_period, focusmon,       {.i = +1 } },
   { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
