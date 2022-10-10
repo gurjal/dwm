@@ -29,15 +29,13 @@ typedef struct {
   const void *cmd;
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "100x30", NULL };
-const char *spcmd2[] = {"st", "-n", "spmixer", "-g", "100x30", "-e", "pulsemixer", NULL };
-const char *spcmd3[] = {"st", "-n", "spconn", "-g", "100x30", "-e", "connmanctl", NULL };
-const char *spcmd4[] = {"st", "-n", "spspot", "-g", "100x30", "-e", "spotify-tui", NULL };
+const char *spcmd2[] = {"st", "-n", "spaudio", "-g", "100x30", "-e", "pulsemixer", NULL };
+const char *spcmd3[] = {"st", "-n", "spdj", "-g", "100x30", NULL };
 static Sp scratchpads[] = {
   /* name          cmd  */
   {"spterm",      spcmd1},
-  {"spmixer",     spcmd2},
-  {"spconn",      spcmd3},
-  {"spspot",      spcmd4},
+  {"spaudio",     spcmd2},
+  {"spdj",        spcmd3},
 };
 
 /* tagging */
@@ -51,9 +49,8 @@ static const Rule rules[] = {
   { "st-256color", NULL,  NULL,           0,         0,          1,           0,        -1 },
   { "tabbed",  NULL,      NULL,           0,         0,          0,           0,        -1 },
   { NULL,      "spterm",  NULL,           SPTAG(0),  1,          1,           0,        -1 },
-  { NULL,      "spmixer", NULL,           SPTAG(1),  1,          0,           0,        -1 },
-  { NULL,      "spconn",  NULL,           SPTAG(2),  1,          0,           0,        -1 },
-  { NULL,      "spspot",  NULL,           SPTAG(3),  1,          0,           0,        -1 },
+  { NULL,      "spaudio", NULL,           SPTAG(1),  1,          0,           0,        -1 },
+  { NULL,      "spdj",    NULL,           SPTAG(2),  1,          0,           0,        -1 },
   { NULL,      NULL,      "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -98,54 +95,52 @@ static const char *dmenucmd[] = {
 static const char *pascmd[] = {
   "passmenu", "-m",   dmenumon,  "-fn",  dmenufont, "-nb",
   normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
-  select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL};
+  select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL };
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox", NULL };
 static const char *prwcmd[] = { "firefox_private", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
-static const char *expcmd[] = { "pcmanfm", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
 static const char *decvol[] = { "pulsemixer", "--change-volume", "-5", NULL };
-static const char *mutvol[] = {"pulsemixer", "--toggle-mute", NULL};
-static const char *mutmic[] = {"pulsemixer_micmute", NULL};
-static const char *inclit[] = {"light", "-A", "10", NULL};
-static const char *declit[] = {"light", "-U", "10", NULL};
-static const char *set_bg[] = {"set_bg", NULL};
+static const char *mutvol[] = { "pulsemixer", "--toggle-mute", NULL };
+static const char *mutmic[] = { "pulsemixer_micmute", NULL };
+static const char *inclit[] = { "light", "-A", "10", NULL };
+static const char *declit[] = { "light", "-U", "10", NULL };
+static const char *set_bg[] = { "set_bg", NULL };
 
 #include "movestack.c"
 static Key keys[] = {
   /* modifier                     key        function        argument */
-  { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-  { MODKEY,                       XK_s,      spawn,          {.v = pascmd } },
-  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd } },
-  { MODKEY|ControlMask|ShiftMask, XK_Return, spawn,          {.v = tabcmd } },
-  { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd } },
-  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prwcmd } },
-  { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd } },
-  { MODKEY|ShiftMask,             XK_e,      spawn,          {.v = expcmd } },
-  { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = scrcmd } },
-  { 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = incvol } },
-  { 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = decvol } },
-  { 0,                XF86XK_AudioMute,      spawn,          {.v = mutvol } },
-  { 0,             XF86XK_AudioMicMute,      spawn,          {.v = mutmic } },
-  { 0,          XF86XK_MonBrightnessUp,      spawn,          {.v = inclit } },
-  { 0,        XF86XK_MonBrightnessDown,      spawn,          {.v = declit } },
-  { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = set_bg } },
+  { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd} },
+  { MODKEY,                       XK_s,      spawn,          {.v = pascmd} },
+  { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd} },
+  { MODKEY|ControlMask|ShiftMask, XK_Return, spawn,          {.v = tabcmd} },
+  { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd} },
+  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prwcmd} },
+  { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd} },
+  { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = scrcmd} },
+  { 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = incvol} },
+  { 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = decvol} },
+  { 0,                XF86XK_AudioMute,      spawn,          {.v = mutvol} },
+  { 0,             XF86XK_AudioMicMute,      spawn,          {.v = mutmic} },
+  { 0,          XF86XK_MonBrightnessUp,      spawn,          {.v = inclit} },
+  { 0,        XF86XK_MonBrightnessDown,      spawn,          {.v = declit} },
+  { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = set_bg} },
   { MODKEY,                       XK_b,      togglebar,      {0} },
   { MODKEY,                       XK_Return, zoom,           {0} },
   { MODKEY,                       XK_space,  switchcol,      {0} },
-  { MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-  { MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-  { MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
-  { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
-  { MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-  { MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
+  { MODKEY,                       XK_j,      focusstack,     {.i = +1} },
+  { MODKEY,                       XK_k,      focusstack,     {.i = -1} },
+  { MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1} },
+  { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1} },
+  { MODKEY,                       XK_i,      incnmaster,     {.i = +1} },
+  { MODKEY,                       XK_o,      incnmaster,     {.i = -1} },
   { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
   { MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-  { MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = -0.05} },
-  { MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = +0.05} },
+  { MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = -0.02} },
+  { MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = +0.02} },
   { MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
   { MODKEY,                       XK_r,      togglermaster,  {0} },
   { MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
@@ -155,17 +150,16 @@ static Key keys[] = {
   { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[3]} },
   { MODKEY,                       XK_f,      setlayout,      {.v = &layouts[4]} },
   { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-  { MODKEY,                       XK_grave,  togglescratch,  {.ui = 0 } },
-  { MODKEY|ShiftMask,             XK_m,      togglescratch,  {.ui = 1 } },
-  { MODKEY|ShiftMask,             XK_n,      togglescratch,  {.ui = 2 } },
-  { MODKEY|ShiftMask,             XK_a,      togglescratch,  {.ui = 3 } },
-  { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-  { MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-  { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-  { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+  { MODKEY,                       XK_grave,  togglescratch,  {.ui = 0} },
+  { MODKEY,                       XK_a,      togglescratch,  {.ui = 1} },
+  { MODKEY,                       XK_s,      togglescratch,  {.ui = 2} },
+  { MODKEY,                       XK_comma,  focusmon,       {.i = -1} },
+  { MODKEY,                       XK_period, focusmon,       {.i = +1} },
+  { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1} },
+  { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1} },
   { MODKEY,                       XK_Tab,    view,           {0} },
-  { MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-  { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+  { MODKEY,                       XK_0,      view,           {.ui = ~0} },
+  { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0} },
   TAGKEYS(                        XK_1,                      0)
   TAGKEYS(                        XK_2,                      1)
   TAGKEYS(                        XK_3,                      2)
@@ -188,13 +182,12 @@ static Button buttons[] = {
   { ClkWinTitle,          0,              Button1,        zoom,           {0} },
   { ClkWinTitle,          0,              Button2,        killclient,     {0} },
   { ClkWinTitle,          0,              Button3,        togglefloating, {0} },
-  { ClkWinTitle,          0,              Button4,        focusstack,     {.i = +1 } },
-  { ClkWinTitle,          0,              Button5,        focusstack,     {.i = -1 } },
-  { ClkStatusText,        0,              Button1,        spawn,          {.v = expcmd } },
-  { ClkStatusText,        0,              Button2,        spawn,          {.v = tercmd } },
-  { ClkStatusText,        0,              Button3,        spawn,          {.v = brwcmd } },
-  { ClkStatusText,        0,              Button4,        spawn,          {.v = incvol } },
-  { ClkStatusText,        0,              Button5,        spawn,          {.v = decvol } },
+  { ClkWinTitle,          0,              Button4,        focusstack,     {.i = +1} },
+  { ClkWinTitle,          0,              Button5,        focusstack,     {.i = -1} },
+  { ClkStatusText,        0,              Button2,        spawn,          {.v = tercmd} },
+  { ClkStatusText,        0,              Button3,        spawn,          {.v = brwcmd} },
+  { ClkStatusText,        0,              Button4,        spawn,          {.v = incvol} },
+  { ClkStatusText,        0,              Button5,        spawn,          {.v = decvol} },
   { ClkTagBar,            0,              Button1,        view,           {0} },
   { ClkTagBar,            0,              Button2,        tag,            {0} },
   { ClkTagBar,            0,              Button3,        toggleview,     {0} },
