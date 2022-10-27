@@ -16,8 +16,8 @@ static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "FiraCode Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true" };
-static const char dmenufont[]       = "FiraCode Nerd Font:style=Regular:pixelsize=16:antialias=true:hinting=true";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
