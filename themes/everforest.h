@@ -1,5 +1,5 @@
 /*
-* dwm/themes/embark.h
+* dwm/themes/everforest.h
 *
 */
 
