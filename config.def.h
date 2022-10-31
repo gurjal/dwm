@@ -49,8 +49,8 @@ static const Rule rules[] = {
   { "st-256color", NULL,  NULL,           0,         0,          1,           0,        -1 },
   { "tabbed",  NULL,      NULL,           0,         0,          0,           0,        -1 },
   { NULL,      "spterm",  NULL,           SPTAG(0),  1,          1,           0,        -1 },
-  { NULL,      "spaudio", NULL,           SPTAG(1),  1,          0,           0,        -1 },
-  { NULL,      "spdj",    NULL,           SPTAG(2),  1,          0,           0,        -1 },
+  { NULL,      "spaudio", NULL,           SPTAG(1),  1,          1,           0,        -1 },
+  { NULL,      "spdj",    NULL,           SPTAG(2),  1,          1,           0,        -1 },
   { NULL,      NULL,      "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
