@@ -2363,7 +2363,7 @@ column(Monitor *m)
 		return;
 
 	if (n > m->nmaster)
-		mw = m->nmaster ? m->ww * m->mfact : 0;
+		mw = m->nmaster ? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact) : 0;
 	else
 		mw = m->ww;
 	for (i = x = y = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
@@ -2371,16 +2371,18 @@ column(Monitor *m)
 			// h = (m->wh - my) * (c->cfact / mfacts);
 			// w = (mw - x) / (MIN(n, m->nmaster) - i);
 			w = (mw - x) * (c->cfact / mfacts);
-			resize(c, x + m->wx, m->wy, w - (2 * c->bw), m->wh - (2 * c->bw), 0);
-			if (x + WIDTH(c) < m->ww)
-                x += WIDTH(c);
+			// resize(c, x + m->wx, m->wy, w - (2 * c->bw), m->wh - (2 * c->bw), 0);
+			resize(c, m->rmaster ? x + m->wx + m->ww - mw : x + m->wx,
+			       m->wy, w - (2*c->bw), m->wh - (2*c->bw), 0);
+            x += WIDTH(c);
             mfacts -= c->cfact;
 		} else {
 			// h = (m->wh - y) / (n - i);
 			h = (m->wh - y) * (c->cfact / sfacts);
-			resize(c, x + m->wx, m->wy + y, m->ww - x - (2 * c->bw), h - (2 * c->bw), 0);
-			if (y + HEIGHT(c) < m->wh)
-                y += HEIGHT(c);
+			// resize(c, x + m->wx, m->wy + y, m->ww - x - (2 * c->bw), h - (2 * c->bw), 0);
+			resize(c, m->rmaster ? m->wx : x + m->wx, m->wy + y,
+			       m->ww - x - (2 * c->bw), h - (2*c->bw), 0);
+            y += HEIGHT(c);
             sfacts -= c->cfact;
 		}
 }
@@ -2408,11 +2410,14 @@ deck(Monitor *m)
 	for(i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if(i < m->nmaster) {
 			h = (m->wh - my) * (c->cfact / mfacts);
-			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			// resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			resize(c, m->rmaster ? m->wx + m->ww - mw : m->wx,
+			       m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
 			if (my + HEIGHT(c) < m->wh)
 				my += HEIGHT(c);
 			mfacts -= c->cfact;
 		}
 		else
-			resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
+			resize(c, m->rmaster ? m->wx : m->wx + mw, m->wy,
+			       m->ww - mw - (2*c->bw), m->wh - (2*c->bw), 0);
 }
