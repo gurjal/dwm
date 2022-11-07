@@ -110,7 +110,6 @@ static const char *inclit[] = { "light", "-A", "10", NULL };
 static const char *declit[] = { "light", "-U", "10", NULL };
 static const char *set_bg[] = { "set_bg", NULL };
 
-#include "movestack.c"
 static Key keys[] = {
   /* modifier                     key        function        argument */
   { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd} },
