@@ -175,12 +175,10 @@ static void checkotherwm(void);
 static void cleanup(void);
 static void cleanupmon(Monitor *mon);
 static void clientmessage(XEvent *e);
-static void column(Monitor *);
 static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
 static Monitor *createmon(void);
-static void deck(Monitor *m);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
@@ -206,7 +204,6 @@ static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
-static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static void movestack(const Arg *arg);
@@ -236,7 +233,6 @@ static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
-static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglermaster(const Arg *arg);
@@ -262,6 +258,12 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
+
+static void tile(Monitor *m);
+static void monocle(Monitor *m);
+static void column(Monitor *);
+static void deck(Monitor *m);
+static void horizgrid(Monitor *m);
 
 static pid_t getparentprocess(pid_t p);
 static int isdescprocess(pid_t p, pid_t c);
@@ -2686,4 +2688,37 @@ deck(Monitor *m)
 		else
 			resize(c, m->rmaster ? m->wx : m->wx + mw, m->wy,
 			       m->ww - mw - (2*c->bw), m->wh - (2*c->bw), 0);
+}
+
+void
+horizgrid(Monitor *m) {
+	Client *c;
+	unsigned int n, i;
+	int w = 0;
+	int ntop, nbottom = 0;
+
+	/* Count windows */
+	for(n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+
+	if(n == 0)
+		return;
+	else if(n == 1) { /* Just fill the whole screen */
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, m->ww - (2*c->bw), m->wh - (2*c->bw), False);
+	} else if(n == 2) { /* Split vertically */
+		w = m->ww / 2;
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, w - (2*c->bw), m->wh - (2*c->bw), False);
+		c = nexttiled(c->next);
+		resize(c, m->wx + w, m->wy, w - (2*c->bw), m->wh - (2*c->bw), False);
+	} else {
+		ntop = n / 2;
+		nbottom = n - ntop;
+		for(i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+			if(i < ntop)
+				resize(c, m->wx + i * m->ww / ntop, m->wy, m->ww / ntop - (2*c->bw), m->wh / 2 - (2*c->bw), False);
+			else
+				resize(c, m->wx + (i - ntop) * m->ww / nbottom, m->wy + m->wh / 2, m->ww / nbottom - (2*c->bw), m->wh / 2 - (2*c->bw), False);
+		}
+	}
 }
