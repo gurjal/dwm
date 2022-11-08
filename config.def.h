@@ -59,7 +59,7 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 	{ "|||",      column },
 	{ "[D]",      deck },
-	{ "###",      horizgrid },
+	{ "###",      nrowgrid },
 	{ "|M|",      centeredmaster },
 	{ ">M>",      centeredfloatingmaster },
 };
