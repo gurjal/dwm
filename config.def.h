@@ -9,6 +9,7 @@ static const int rmaster            = 0;        /* 1 means master-area is initia
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int focusonwheel       = 0;
 static const char *fonts[]          = { "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
