@@ -7,6 +7,11 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int rmaster            = 0;        /* 1 means master-area is initially on the right */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
+static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
+static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
@@ -88,14 +93,14 @@ static const char *dmenucmd[] = {
   "dmenu_run", "-m",   dmenumon,  "-fn",  dmenufont, "-nb",
   normal_bg,   "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,   "-shb", normal_bd, "-shf", select_bd, NULL};
-static const char *pascmd[] = {
+static const char *passwcmd[] = {
   "passmenu", "-m",   dmenumon,  "-fn",  dmenufont, "-nb",
   normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL };
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox", NULL };
-static const char *prwcmd[] = { "firefox_private", NULL };
+static const char *prwcmd[] = { "firefox", "--private-window", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
@@ -109,11 +114,11 @@ static const char *set_bg[] = { "set_bg", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd} },
-    { MODKEY,                       XK_s,      spawn,          {.v = pascmd} },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = passwcmd} },
     { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd} },
-    { MODKEY|ControlMask|ShiftMask, XK_Return, spawn,          {.v = tabcmd} },
+    { MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabcmd} },
     { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd} },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prwcmd} },
+    { MODKEY|ControlMask,           XK_i,      spawn,          {.v = prwcmd} },
     { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd} },
     { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = scrcmd} },
     { 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = incvol} },
@@ -158,7 +163,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1} },
 	{ MODKEY,                       XK_grave,  togglescratch,  {.ui = 0 } },
 	{ MODKEY,                       XK_a,      togglescratch,  {.ui = 1 } },
-	{ MODKEY|ShiftMask,             XK_a,      togglescratch,  {.ui = 2 } },
+	{ MODKEY,                       XK_s,      togglescratch,  {.ui = 2 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -175,8 +180,8 @@ static const Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = tercmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
