@@ -1,6 +1,6 @@
 #include <X11/XF86keysym.h>
 
-#include "themes/nord.h"
+#include "themes/tundra.h"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -101,7 +101,6 @@ static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox", NULL };
 static const char *prwcmd[] = { "firefox_private", NULL };
-static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
 static const char *decvol[] = { "pulsemixer", "--change-volume", "-5", NULL };
@@ -119,7 +118,6 @@ static const Key keys[] = {
     { MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabcmd} },
     { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd} },
     { MODKEY|ControlMask,           XK_i,      spawn,          {.v = prwcmd} },
-    { MODKEY|ShiftMask,             XK_v,      spawn,          {.v = vrtcmd} },
     { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = scrcmd} },
     { 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = incvol} },
     { 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = decvol} },
