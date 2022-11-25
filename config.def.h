@@ -5,7 +5,7 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int rmaster            = 0;        /* 1 means master-area is initially on the right */
+static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -53,7 +53,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.45; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
@@ -100,7 +100,7 @@ static const char *passwcmd[] = {
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *brwcmd[] = { "firefox", NULL };
-static const char *prwcmd[] = { "firefox", "--private-window", NULL };
+static const char *prwcmd[] = { "firefox_private", NULL };
 static const char *vrtcmd[] = { "virt-manager", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
