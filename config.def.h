@@ -15,8 +15,8 @@ static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true";
+static const char *fonts[]          = { "Iosevka Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true" };
+static const char dmenufont[]       = "Iosevka Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -29,12 +29,14 @@ typedef struct {
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spaudio", "-g", "120x34", "-e", "pulsemixer", NULL };
-const char *spcmd3[] = {"st", "-n", "spdj", "-g",  "120x34", NULL };
+const char *spcmd3[] = {"st", "-n", "spdj", "-g", "120x34", NULL };
+const char *spcmd4[] = {"st", "-n", "sppass", "-g", "42x42", "-e", "zsh", "-c", "$HOME/.local/bin/rbw_login", NULL };
 static Sp scratchpads[] = {
     /* name          cmd  */
     {"spterm",      spcmd1},
     {"spaudio",     spcmd2},
     {"spdj",        spcmd3},
+    {"sppass",      spcmd4},
 };
 
 /* tagging */
@@ -46,9 +48,10 @@ static const Rule rules[] = {
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "st",      NULL,     NULL,           0,         0,          1,           0,        -1 },
-    { NULL,      "spterm",  NULL,          SPTAG(0),  1,          1,           0,        -1 },
+    { NULL,      "spterm", NULL,          SPTAG(0),   1,          1,           0,        -1 },
     { NULL,      "spaudio", NULL,          SPTAG(1),  1,          1,           0,        -1 },
-    { NULL,      "spdj",    NULL,          SPTAG(2),  1,          1,           0,        -1 },
+    { NULL,      "spdj",   NULL,          SPTAG(2),   1,          1,           0,        -1 },
+    { NULL,      "sppass", NULL,          SPTAG(3),   1,          1,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -66,8 +69,6 @@ static const Layout layouts[] = {
 	{ "|||",      column },
 	{ "[D]",      deck },
 	{ "###",      nrowgrid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
 };
 
 static const MonitorRule monrules[] = {
@@ -93,15 +94,11 @@ static const char *dmenucmd[] = {
   "dmenu_run", "-m",   dmenumon,  "-fn",  dmenufont, "-nb",
   normal_bg,   "-nf",  normal_fg, "-sb",  select_bg, "-sf",
   select_fg,   "-shb", normal_bd, "-shf", select_bd, NULL};
-static const char *passwcmd[] = {
-  "passmenu", "-m",   dmenumon,  "-fn",  dmenufont, "-nb",
-  normal_bg,  "-nf",  normal_fg, "-sb",  select_bg, "-sf",
-  select_fg,  "-shb", normal_bd, "-shf", select_bd, NULL };
 static const char *tercmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
-static const char *brwcmd[] = { "firefox", NULL };
+static const char *brwcmd[] = { "qutebrowser", NULL };
 static const char *prwcmd[] = { "firefox_private", NULL };
-static const char *emccmd[] = { "emclient", NULL };
+static const char *emccmd[] = { "emacsclient", "-c", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
 static const char *decvol[] = { "pulsemixer", "--change-volume", "-5", NULL };
@@ -114,7 +111,6 @@ static const char *set_bg[] = { "set_bg", NULL };
 static const Key keys[] = {
   /* modifier                     key        function        argument */
   { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd} },
-  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = passwcmd} },
   { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tercmd} },
   { MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabcmd} },
   { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd} },
@@ -149,8 +145,6 @@ static const Key keys[] = {
   { MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[3]} },
   { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[4]} },
   { MODKEY,                       XK_g,      setlayout,      {.v = &layouts[5]} },
-  { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[6]} },
-  { MODKEY|ShiftMask,             XK_u,      setlayout,      {.v = &layouts[7]} },
   { MODKEY|ShiftMask,             XK_m,      fullscreen,     {0} },
   { MODKEY,                       XK_r,      togglermaster,  {0} },
   { MODKEY,                       XK_space,  switchcol,      {0} },
@@ -161,9 +155,10 @@ static const Key keys[] = {
   { MODKEY,                       XK_period, focusmon,       {.i = +1} },
   { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1} },
   { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1} },
-  { MODKEY,                       XK_grave,  togglescratch,  {.ui = 0 } },
+  { MODKEY,                       XK_n,      togglescratch,  {.ui = 0 } },
   { MODKEY,                       XK_a,      togglescratch,  {.ui = 1 } },
   { MODKEY,                       XK_s,      togglescratch,  {.ui = 2 } },
+  { MODKEY,                       XK_w,      togglescratch,  {.ui = 3 } },
   TAGKEYS(                        XK_1,                      0)
   TAGKEYS(                        XK_2,                      1)
   TAGKEYS(                        XK_3,                      2)
