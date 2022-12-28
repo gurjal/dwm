@@ -15,8 +15,8 @@ static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "Iosevka Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true" };
-static const char dmenufont[]       = "Iosevka Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:hinting=true";
+static const char *fonts[]          = { "Iosevka Nerd Font Mono:style=Regular:pixelsize=18:antialias=true:hinting=true" };
+static const char dmenufont[]       = "Iosevka Nerd Font Mono:style=Regular:pixelsize=18:antialias=true:hinting=true";
 static const char *colors[][3]      = {
   /*               fg         bg         border   */
   [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -28,15 +28,17 @@ typedef struct {
 	const void *cmd;
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {"st", "-n", "spaudio", "-g", "120x34", "-e", "pulsemixer", NULL };
-const char *spcmd3[] = {"st", "-n", "spdj", "-g", "120x34", NULL };
-const char *spcmd4[] = {"st", "-n", "sppass", "-g", "42x42", "-e", "zsh", "-c", "$HOME/.local/bin/rbw_login", NULL };
+const char *spcmd2[] = {"st", "-n", "sporg", "-g", "120x34", "-e", "emacs", NULL };
+const char *spcmd3[] = {"st", "-n", "spaudio", "-g", "120x34", "-e", "pulsemixer", NULL };
+const char *spcmd4[] = {"st", "-n", "spdj", "-g", "120x34", NULL };
+const char *spcmd5[] = {"st", "-n", "sppass", "-g", "65x42", NULL };
 static Sp scratchpads[] = {
     /* name          cmd  */
     {"spterm",      spcmd1},
-    {"spaudio",     spcmd2},
-    {"spdj",        spcmd3},
-    {"sppass",      spcmd4},
+    {"sporg",       spcmd2},
+    {"spaudio",     spcmd3},
+    {"spdj",        spcmd4},
+    {"sppass",      spcmd5},
 };
 
 /* tagging */
@@ -49,16 +51,17 @@ static const Rule rules[] = {
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "st",      NULL,     NULL,           0,         0,          1,           0,        -1 },
     { NULL,      "spterm", NULL,          SPTAG(0),   1,          1,           0,        -1 },
-    { NULL,      "spaudio", NULL,          SPTAG(1),  1,          1,           0,        -1 },
-    { NULL,      "spdj",   NULL,          SPTAG(2),   1,          1,           0,        -1 },
-    { NULL,      "sppass", NULL,          SPTAG(3),   1,          1,           0,        -1 },
+    { NULL,      "sporg", NULL,           SPTAG(1),   1,          1,           0,        -1 },
+    { NULL,      "spaudio", NULL,         SPTAG(2),   1,          1,           0,        -1 },
+    { NULL,      "spdj",   NULL,          SPTAG(3),   1,          1,           0,        -1 },
+    { NULL,      "sppass", NULL,          SPTAG(4),   1,          1,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
 static const float mfact     = 0.45; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -115,7 +118,7 @@ static const Key keys[] = {
   { MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabcmd} },
   { MODKEY|ShiftMask,             XK_i,      spawn,          {.v = brwcmd} },
   { MODKEY|ControlMask,           XK_i,      spawn,          {.v = prwcmd} },
-  { MODKEY|ShiftMask,             XK_e,      spawn,          {.v = emccmd} },
+  { MODKEY,                       XK_e,      spawn,          {.v = emccmd} },
   { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = scrcmd} },
   { 0,         XF86XK_AudioRaiseVolume,      spawn,          {.v = incvol} },
   { 0,         XF86XK_AudioLowerVolume,      spawn,          {.v = decvol} },
@@ -155,10 +158,11 @@ static const Key keys[] = {
   { MODKEY,                       XK_period, focusmon,       {.i = +1} },
   { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1} },
   { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1} },
-  { MODKEY,                       XK_n,      togglescratch,  {.ui = 0 } },
-  { MODKEY,                       XK_a,      togglescratch,  {.ui = 1 } },
-  { MODKEY,                       XK_s,      togglescratch,  {.ui = 2 } },
-  { MODKEY,                       XK_w,      togglescratch,  {.ui = 3 } },
+  { MODKEY,                       XK_semicolon, togglescratch, {.ui = 0 } },
+  { MODKEY,                       XK_n,      togglescratch,  {.ui = 1 } },
+  { MODKEY,                       XK_a,      togglescratch,  {.ui = 2 } },
+  { MODKEY,                       XK_s,      togglescratch,  {.ui = 3 } },
+  { MODKEY,                       XK_w,      togglescratch,  {.ui = 4 } },
   TAGKEYS(                        XK_1,                      0)
   TAGKEYS(                        XK_2,                      1)
   TAGKEYS(                        XK_3,                      2)
@@ -175,16 +179,15 @@ static const Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = tercmd } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button1,        resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	{ ClkWinTitle,          0,              Button1,        zoom,           {0} },
+	{ ClkWinTitle,          0,              Button2,        killclient,     {0} },
+	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+	{ ClkStatusText,        0,              Button2,        spawn,          {.v = brwcmd } },
+	{ ClkStatusText,        0,              Button3,        spawn,          {.v = tercmd } },
 };
-
