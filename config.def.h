@@ -68,14 +68,13 @@ static const Layout layouts[] = {
     { "[]=",      tile },
     { "><>",      NULL },
     { "[M]",      monocle },
-    { "|||",      column },
     { "[D]",      deck },
     { "###",      nrowgrid },
 };
 
 static const MonitorRule monrules[] = {
     /* monitor  tag  layout  mfact  nmaster  showbar  topbar */
-    {  1,       -1,  2,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
+    {  -1,       9,  1,      -1,    -1,      -1,      -1     }, // using tag 9 as null layout buffer area
     {  -1,      -1,  0,      -1,    -1,      -1,      -1     }, // default
 };
 
@@ -108,13 +107,10 @@ static const char *mutvol[] = { "pulsemixer", "--toggle-mute", NULL };
 static const char *mutmic[] = { "pulsemixer_micmute", NULL };
 static const char *inclit[] = { "light", "-A", "10", NULL };
 static const char *declit[] = { "light", "-U", "10", NULL };
-static const char *set_bg[] = { "set_bg", NULL };
 
 static const Key keys[] = {
     /* modifier                          key                       function        argument */
     {  MODKEY,                           XK_p,                     spawn,          { .v = dmenucmd } },
-    {  MODKEY|ShiftMask,                 XK_m,                     spawn,          { .v = tercmd } },
-    {  MODKEY|ControlMask,               XK_m,                     spawn,          { .v = tabcmd } },
     {  MODKEY|ShiftMask,                 XK_Return,                spawn,          { .v = tercmd } },
     {  MODKEY|ControlMask,               XK_Return,                spawn,          { .v = tabcmd } },
     {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = qtbcmd } },
@@ -127,10 +123,10 @@ static const Key keys[] = {
     {  0,                                XF86XK_AudioMicMute,      spawn,          { .v = mutmic } },
     {  0,                                XF86XK_MonBrightnessUp,   spawn,          { .v = inclit } },
     {  0,                                XF86XK_MonBrightnessDown, spawn,          { .v = declit } },
-    {  MODKEY|ShiftMask,                 XK_b,                     spawn,          { .v = set_bg } },
-    {  MODKEY,                           XK_b,                     togglebar,      { 0 } },
-    {  MODKEY,                           XK_m,                     zoom,           { 0 } },
+    {  MODKEY,                           XK_b,                     toggleview,     { .ui = (1<<8) } },
+    {  MODKEY|ShiftMask,                 XK_b,                     togglebar,      { 0 } },
     {  MODKEY,                           XK_Return,                zoom,           { 0 } },
+    {  MODKEY,                           XK_comma,                 switchcol,      { 0 } },
     {  MODKEY,                           XK_j,                     focusstack,     { .i = +1 } },
     {  MODKEY,                           XK_k,                     focusstack,     { .i = -1 } },
     {  MODKEY,                           XK_i,                     incnmaster,     { .i = +1 } },
@@ -142,27 +138,26 @@ static const Key keys[] = {
     {  MODKEY|ShiftMask,                 XK_o,                     setcfact,       { .f =  0.00 } },
     {  MODKEY|ShiftMask,                 XK_j,                     movestack,      { .i = +1 } },
     {  MODKEY|ShiftMask,                 XK_k,                     movestack,      { .i = -1 } },
-    {  MODKEY,                           XK_Tab,                   view,           { 0 } },
     {  MODKEY|ShiftMask,                 XK_c,                     killclient,     { 0 } },
     {  MODKEY,                           XK_t,                     setlayout,      { .v = &layouts[0] } }, // tile
-    {  MODKEY|ShiftMask,                 XK_f,                     setlayout,      { .v = &layouts[1] } }, // null
-    {  MODKEY,                           XK_f,                     setlayout,      { .v = &layouts[2] } }, // monocle
-    {  MODKEY|ShiftMask,                 XK_t,                     setlayout,      { .v = &layouts[3] } }, // column
-    {  MODKEY,                           XK_d,                     setlayout,      { .v = &layouts[4] } }, // deck
-    {  MODKEY,                           XK_g,                     setlayout,      { .v = &layouts[5] } }, // grid
+    {  MODKEY,                           XK_f,                     setlayout,      { .v = &layouts[1] } }, // null
+    {  MODKEY,                           XK_m,                     setlayout,      { .v = &layouts[2] } }, // monocle
+    {  MODKEY,                           XK_d,                     setlayout,      { .v = &layouts[3] } }, // deck
+    {  MODKEY,                           XK_g,                     setlayout,      { .v = &layouts[4] } }, // grid
     {  MODKEY,                           XK_r,                     togglermaster,  { 0 } },
-    {  MODKEY,                           XK_space,                 switchcol,      { 0 } },
+    {  MODKEY,                           XK_space,                 setlayout,      { 0 } },
     {  MODKEY|ShiftMask,                 XK_space,                 togglefloating, { 0 } },
-    {  MODKEY,                           XK_0,                     view,           { .ui = ~0 } },
-    {  MODKEY|ShiftMask,                 XK_0,                     tag,            { .ui = ~0 } },
-    {  MODKEY,                           XK_comma,                 focusmon,       { .i = -1 } },
+    // {  MODKEY,                           XK_comma,                 focusmon,       { .i = -1 } },
     {  MODKEY,                           XK_period,                focusmon,       { .i = +1 } },
-    {  MODKEY|ShiftMask,                 XK_comma,                 tagmon,         { .i = -1 } },
+    // {  MODKEY|ShiftMask,                 XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,                 XK_period,                tagmon,         { .i = +1 } },
     {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 0 } },          // sp
     {  MODKEY,                           XK_semicolon,             togglescratch,  { .ui = 1 } },
     {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 2 } },
     {  MODKEY,                           XK_n,                     togglescratch,  { .ui = 3 } },
+    {  MODKEY,                           XK_Tab,                   view,           { 0 } },
+    {  MODKEY,                           XK_0,                     view,           { .ui = ~0 } },
+    {  MODKEY|ShiftMask,                 XK_0,                     tag,            { .ui = ~0 } },
     TAGKEYS(                             XK_1,                                       0)
     TAGKEYS(                             XK_2,                                       1)
     TAGKEYS(                             XK_3,                                       2)
