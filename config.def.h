@@ -30,15 +30,15 @@ typedef struct {
     const void *cmd;
 } Sp;
 const char *spcmd0[] = { "st", "-n", "spmixer", "-g", "80x24",  "-e", "pulsemixer", NULL };
-const char *spcmd1[] = { "st", "-n", "spstart", "-g", "80x40",  NULL };
+const char *spcmd1[] = { "st", "-n", "spstart", "-g", "100x30",  NULL };
 const char *spcmd2[] = { "st", "-n", "sputils", "-g", "80x24", NULL };
 const char *spcmd3[] = { "emacs", "--name=zettelkasten", "-g", "120x48", NULL };
 static Sp scratchpads[] = {
-    /* name          cmd */
-    {"spmixer",      spcmd0},
-    {"spstart",      spcmd1},
-    {"sputils",      spcmd2},
-    {"zettelkasten", spcmd3},
+    /* name           cmd */
+    { "spmixer",      spcmd0 },
+    { "spstart",      spcmd1 },
+    { "sputils",      spcmd2 },
+    { "zettelkasten", spcmd3 },
 };
 
 /* tagging */
@@ -115,8 +115,8 @@ static const Key keys[] = {
     {  MODKEY,                           XK_p,                     spawn,          { .v = dmenucmd } },
     {  MODKEY|ShiftMask,                 XK_Return,                spawn,          { .v = clicmd } },
     {  MODKEY|ShiftMask|ControlMask,     XK_Return,                spawn,          { .v = tabcmd } },
-    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = qtbcmd } },
-    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = ffbcmd } },
+    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = ffbcmd } },
+    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = qtbcmd } },
     {  MODKEY,                           XK_e,                     spawn,          { .v = emccmd } },
     {  MODKEY|ShiftMask,                 XK_s,                     spawn,          { .v = scrcmd } },
     {  0,                                XF86XK_AudioRaiseVolume,  spawn,          { .v = incvol } },
