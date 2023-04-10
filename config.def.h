@@ -1,11 +1,11 @@
 #include <X11/XF86keysym.h>
 
-#include "themes/tundra.h"
+#include "themes/gruvbox_material.h"
 
 /* appearance */
 static const unsigned int borderpx  = 1;      /* border pixel of windows */
 static const unsigned int snap      = 32;     /* snap pixel */
-static const int rmaster            = 1;      /* 1 means master-area is initially on the right */
+static const int rmaster            = 0;      /* 1 means master-area is initially on the right */
 static const int showbar            = 1;      /* 0 means no bar */
 static const int topbar             = 1;      /* 0 means bottom bar */
 static const int focusonwheel       = 0;
@@ -30,15 +30,15 @@ typedef struct {
     const void *cmd;
 } Sp;
 const char *spcmd0[] = { "st", "-n", "spmixer", "-g", "80x24",  "-e", "pulsemixer", NULL };
-const char *spcmd1[] = { "st", "-n", "spstart", "-g", "100x30",  NULL };
-const char *spcmd2[] = { "st", "-n", "sputils", "-g", "80x24", NULL };
-const char *spcmd3[] = { "emacs", "--name=zettelkasten", "-g", "120x48", NULL };
+const char *spcmd1[] = { "st", "-n", "spstart", "-g", "128x32",  NULL };
+const char *spcmd2[] = { "st", "-n", "sputils", "-g", "128x32", NULL };
+const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "128x48", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
     { "spmixer",      spcmd0 },
     { "spstart",      spcmd1 },
     { "sputils",      spcmd2 },
-    { "zettelkasten", spcmd3 },
+    { "spemacs", spcmd3 },
 };
 
 /* tagging */
@@ -53,12 +53,12 @@ static const Rule rules[] = {
     { NULL,  "spmixer",      NULL,           SPTAG(0),   1,          1,           0,        -1 },
     { NULL,  "spstart",      NULL,           SPTAG(1),   1,          1,           0,        -1 },
     { NULL,  "sputils",      NULL,           SPTAG(2),   1,          1,           0,        -1 },
-    { NULL,  "zettelkasten", NULL,           SPTAG(3),   1,          1,           0,        -1 },
+    { NULL,  "spemacs", NULL,           SPTAG(3),   1,          1,           0,        -1 },
     { NULL,  NULL,           "Event Tester", 0,          0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
-static const float mfact        = 0.45; /* factor of master area size [0.05..0.95] */
+static const float mfact        = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster        = 1;    /* number of clients in master area */
 static const int resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0;    /* 1 will force focus on the fullscreen window */
@@ -80,11 +80,11 @@ static const MonitorRule monrules[] = {
 
 /* key definitions */
 #define MODKEY Mod4Mask
-#define TAGKEYS(KEY,TAG) \
- { MODKEY,                       KEY,      view,       { .ui = 1 << TAG } }, \
- { MODKEY|ControlMask,           KEY,      toggleview, { .ui = 1 << TAG } }, \
- { MODKEY|ShiftMask,             KEY,      tag,        { .ui = 1 << TAG } }, \
- { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,  { .ui = 1 << TAG } },
+#define TAGKEYS(KEY,TAG)\
+    { MODKEY,                       KEY,      view,       { .ui = 1 << TAG } },\
+    { MODKEY|ControlMask,           KEY,      toggleview, { .ui = 1 << TAG } },\
+    { MODKEY|ShiftMask,             KEY,      tag,        { .ui = 1 << TAG } },\
+    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,  { .ui = 1 << TAG } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -92,16 +92,16 @@ static const MonitorRule monrules[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = {
-	"dmenu_run", "-m", dmenumon, "-fn", dmenufont,
-	"-nb", normal_bg, "-nf", normal_fg,
-	"-sb", select_bg, "-sf", select_fg,
-	NULL,
+    "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
+    "-nb", normal_bg, "-nf", normal_fg,
+    "-sb", select_bg, "-sf", select_fg,
+    NULL,
 };
 static const char *clicmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
 static const char *qtbcmd[] = { "qutebrowser", NULL };
 static const char *ffbcmd[] = { "firefox", NULL };
-static const char *emccmd[] = { "emacsclient", "-c", NULL };
+static const char *emccmd[] = { "emacsclient", "-c", "-a", "emacs", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
 static const char *decvol[] = { "pulsemixer", "--change-volume", "-5", NULL };
@@ -156,7 +156,7 @@ static const Key keys[] = {
     {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 0 } }, // spmixer
     {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 1 } }, // spstart
     {  MODKEY,                           XK_semicolon,             togglescratch,  { .ui = 2 } }, // sputils
-    {  MODKEY,                           XK_n,                     togglescratch,  { .ui = 3 } }, // zettelkasten
+    {  MODKEY,                           XK_n,                     togglescratch,  { .ui = 3 } }, // spemacs
     {  MODKEY,                           XK_Tab,                   view,           { 0 } },
     {  MODKEY,                           XK_0,                     view,           { .ui = ~0 } },
     {  MODKEY|ShiftMask,                 XK_0,                     tag,            { .ui = ~0 } },
