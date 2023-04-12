@@ -31,7 +31,7 @@ typedef struct {
 } Sp;
 const char *spcmd0[] = { "st", "-n", "spmixer", "-g", "80x24",  "-e", "pulsemixer", NULL };
 const char *spcmd1[] = { "st", "-n", "spstart", "-g", "128x32",  NULL };
-const char *spcmd2[] = { "st", "-n", "sputils", "-g", "128x32", NULL };
+const char *spcmd2[] = { "st", "-n", "sputils", "-g", "96x32", NULL };
 const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "128x48", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
@@ -153,8 +153,8 @@ static const Key keys[] = {
     {  MODKEY,                           XK_period,                focusmon,       { .i = +1 } },
     // {  MODKEY|ShiftMask,                 XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,                 XK_period,                tagmon,         { .i = +1 } },
-    {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 0 } }, // spmixer
-    {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 1 } }, // spstart
+    {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 0 } }, // spmixer
+    {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 1 } }, // spstart
     {  MODKEY,                           XK_semicolon,             togglescratch,  { .ui = 2 } }, // sputils
     {  MODKEY,                           XK_n,                     togglescratch,  { .ui = 3 } }, // spemacs
     {  MODKEY,                           XK_Tab,                   view,           { 0 } },
