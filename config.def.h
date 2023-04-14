@@ -29,15 +29,15 @@ typedef struct {
     const char *name;
     const void *cmd;
 } Sp;
-const char *spcmd0[] = { "st", "-n", "spmixer", "-g", "80x24",  "-e", "pulsemixer", NULL };
-const char *spcmd1[] = { "st", "-n", "spstart", "-g", "128x32",  NULL };
-const char *spcmd2[] = { "st", "-n", "sputils", "-g", "96x32", NULL };
+const char *spcmd0[] = { "st", "-n", "spsound", "-g", "80x24",  "-e", "pulsemixer", NULL };
+const char *spcmd1[] = { "st", "-n", "sputil0", "-g", "128x32",  NULL };
+const char *spcmd2[] = { "st", "-n", "sputil1", "-g", "96x32", NULL };
 const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "128x48", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
-    { "spmixer",      spcmd0 },
-    { "spstart",      spcmd1 },
-    { "sputils",      spcmd2 },
+    { "spsound",      spcmd0 },
+    { "sputil0",      spcmd1 },
+    { "sputil1",      spcmd2 },
     { "spemacs", spcmd3 },
 };
 
@@ -48,13 +48,13 @@ static const Rule rules[] = {
      * WM_CLASS(STRING) = instance, class
      * WM_NAME(STRING) = title
     */
-    /* class instance        title           tags mask  isfloating  isterminal  noswallow  monitor */
-    { "st",  NULL,           NULL,           0,          0,          1,           0,        -1 },
-    { NULL,  "spmixer",      NULL,           SPTAG(0),   1,          1,           0,        -1 },
-    { NULL,  "spstart",      NULL,           SPTAG(1),   1,          1,           0,        -1 },
-    { NULL,  "sputils",      NULL,           SPTAG(2),   1,          1,           0,        -1 },
-    { NULL,  "spemacs", NULL,           SPTAG(3),   1,          1,           0,        -1 },
-    { NULL,  NULL,           "Event Tester", 0,          0,          0,           1,        -1 }, /* xev */
+    /* class  instance    title            tags mask  isfloating  isterminal  noswallow  monitor */
+    { "st",   NULL,       NULL,            0,         0,          1,          0,         -1 },
+    { NULL,   "sputil0",  NULL,            SPTAG(0),  1,          1,          0,         -1 },
+    { NULL,   "sputil1",  NULL,            SPTAG(1),  1,          1,          0,         -1 },
+    { NULL,   "spsound",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
+    { NULL,   "spemacs",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
+    { NULL,   NULL,       "Event Tester",  0,         0,          0,          1,         -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -64,12 +64,12 @@ static const int resizehints    = 0;    /* 1 means respect size hints in tiled r
 static const int lockfullscreen = 0;    /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
-    /* symbol     arrange function */
-    { "[]=",      tile },
-    { "><>",      NULL },
-    { "[M]",      monocle },
-    { "[D]",      deck },
-    { "###",      nrowgrid },
+    /* symbol  arrange function */
+    { "[]=",   tile },
+    { "><>",   NULL },
+    { "[M]",   monocle },
+    { "[D]",   deck },
+    { "###",   nrowgrid },
 };
 
 static const MonitorRule monrules[] = {
@@ -153,9 +153,9 @@ static const Key keys[] = {
     {  MODKEY,                           XK_period,                focusmon,       { .i = +1 } },
     // {  MODKEY|ShiftMask,                 XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,                 XK_period,                tagmon,         { .i = +1 } },
-    {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 0 } }, // spmixer
-    {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 1 } }, // spstart
-    {  MODKEY,                           XK_semicolon,             togglescratch,  { .ui = 2 } }, // sputils
+    {  MODKEY,                           XK_a,                     togglescratch,  { .ui = 0 } }, // sputil0
+    {  MODKEY,                           XK_semicolon,             togglescratch,  { .ui = 1 } }, // sputil1
+    {  MODKEY,                           XK_s,                     togglescratch,  { .ui = 2 } }, // spsound
     {  MODKEY,                           XK_n,                     togglescratch,  { .ui = 3 } }, // spemacs
     {  MODKEY,                           XK_Tab,                   view,           { 0 } },
     {  MODKEY,                           XK_0,                     view,           { .ui = ~0 } },
