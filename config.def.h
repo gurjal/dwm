@@ -1,11 +1,11 @@
 #include <X11/XF86keysym.h>
 
-#include "themes/gruvbox_material.h"
+#include "themes/frappe.h"
 
 /* appearance */
 static const unsigned int borderpx  = 1;      /* border pixel of windows */
 static const unsigned int snap      = 32;     /* snap pixel */
-static const int rmaster            = 0;      /* 1 means master-area is initially on the right */
+static const int rmaster            = 1;      /* 1 means master-area is initially on the right */
 static const int showbar            = 1;      /* 0 means no bar */
 static const int topbar             = 1;      /* 0 means bottom bar */
 static const int focusonwheel       = 0;
@@ -58,7 +58,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact        = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact        = 0.45; /* factor of master area size [0.05..0.95] */
 static const int nmaster        = 1;    /* number of clients in master area */
 static const int resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0;    /* 1 will force focus on the fullscreen window */
@@ -115,8 +115,8 @@ static const Key keys[] = {
     {  MODKEY,                           XK_p,                     spawn,          { .v = dmenucmd } },
     {  MODKEY|ShiftMask,                 XK_Return,                spawn,          { .v = clicmd } },
     {  MODKEY|ShiftMask|ControlMask,     XK_Return,                spawn,          { .v = tabcmd } },
-    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = ffbcmd } },
-    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = qtbcmd } },
+    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = qtbcmd } },
+    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = ffbcmd } },
     {  MODKEY,                           XK_e,                     spawn,          { .v = emccmd } },
     {  MODKEY|ShiftMask,                 XK_s,                     spawn,          { .v = scrcmd } },
     {  0,                                XF86XK_AudioRaiseVolume,  spawn,          { .v = incvol } },
