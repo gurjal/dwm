@@ -4,7 +4,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;      /* border pixel of windows */
-static const unsigned int snap      = 32;     /* snap pixel */
+static const unsigned int snap      = 5;     /* snap pixel */
 static const int rmaster            = 1;      /* 1 means master-area is initially on the right */
 static const int showbar            = 1;      /* 0 means no bar */
 static const int topbar             = 1;      /* 0 means bottom bar */
@@ -29,16 +29,16 @@ typedef struct {
     const char *name;
     const void *cmd;
 } Sp;
-const char *spcmd0[] = { "st", "-n", "spsound", "-g", "80x24",  "-e", "pulsemixer", NULL };
-const char *spcmd1[] = { "st", "-n", "sputil0", "-g", "128x32",  NULL };
-const char *spcmd2[] = { "st", "-n", "sputil1", "-g", "96x32", NULL };
+const char *spcmd0[] = { "st", "-n", "sputil0", "-g", "128x32",  NULL };
+const char *spcmd1[] = { "st", "-n", "sputil1", "-g", "96x32", NULL };
+const char *spcmd2[] = { "st", "-n", "spsound", "-g", "80x24",  "-e", "pulsemixer", NULL };
 const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "128x48", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
-    { "spsound",      spcmd0 },
-    { "sputil0",      spcmd1 },
-    { "sputil1",      spcmd2 },
-    { "spemacs", spcmd3 },
+    { "sputil0",      spcmd0 },
+    { "sputil1",      spcmd1 },
+    { "spsound",      spcmd2 },
+    { "spemacs",      spcmd3 },
 };
 
 /* tagging */
@@ -99,8 +99,8 @@ static const char *dmenucmd[] = {
 };
 static const char *clicmd[] = { "st", NULL };
 static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
-static const char *qtbcmd[] = { "qutebrowser", NULL };
 static const char *ffbcmd[] = { "firefox", NULL };
+static const char *qtbcmd[] = { "qutebrowser", NULL };
 static const char *emccmd[] = { "emacsclient", "-c", "-a", "emacs", NULL };
 static const char *scrcmd[] = { "take_screen", NULL };
 static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
@@ -115,8 +115,8 @@ static const Key keys[] = {
     {  MODKEY,                           XK_p,                     spawn,          { .v = dmenucmd } },
     {  MODKEY|ShiftMask,                 XK_Return,                spawn,          { .v = clicmd } },
     {  MODKEY|ShiftMask|ControlMask,     XK_Return,                spawn,          { .v = tabcmd } },
-    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = qtbcmd } },
-    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = ffbcmd } },
+    {  MODKEY|ShiftMask,                 XK_i,                     spawn,          { .v = ffbcmd } },
+    {  MODKEY|ControlMask,               XK_i,                     spawn,          { .v = qtbcmd } },
     {  MODKEY,                           XK_e,                     spawn,          { .v = emccmd } },
     {  MODKEY|ShiftMask,                 XK_s,                     spawn,          { .v = scrcmd } },
     {  0,                                XF86XK_AudioRaiseVolume,  spawn,          { .v = incvol } },
@@ -181,6 +181,9 @@ static const Button buttons[] = {
     {  ClkTagBar,           0,              Button3,        toggleview,     { 0 } },
     {  ClkTagBar,           MODKEY,         Button1,        tag,            { 0 } },
     {  ClkTagBar,           MODKEY,         Button3,        toggletag,      { 0 } },
+    {  ClkLtSymbol,         MODKEY,         Button1,        setlayout,      { .v = &layouts[0] } },
+    {  ClkLtSymbol,         MODKEY,         Button2,        setlayout,      { .v = &layouts[1] } },
+    {  ClkLtSymbol,         MODKEY,         Button3,        setlayout,      { .v = &layouts[2] } },
     {  ClkWinTitle,         0,              Button1,        zoom,           { 0 } },
     {  ClkWinTitle,         0,              Button2,        killclient,     { 0 } },
     {  ClkWinTitle,         0,              Button4,        focusstack,     { .i = +1 } },
@@ -188,6 +191,6 @@ static const Button buttons[] = {
     {  ClkClientWin,        MODKEY,         Button1,        movemouse,      { 0 } },
     {  ClkClientWin,        MODKEY,         Button2,        togglefloating, { 0 } },
     {  ClkClientWin,        MODKEY,         Button3,        resizemouse,    { 0 } },
+    {  ClkStatusText,       0,              Button1,        spawn,          { .v = clicmd } },
     {  ClkStatusText,       0,              Button2,        spawn,          { .v = ffbcmd } },
-    {  ClkStatusText,       0,              Button3,        spawn,          { .v = clicmd } },
 };
