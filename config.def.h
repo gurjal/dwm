@@ -1,6 +1,6 @@
 #include <X11/XF86keysym.h>
 
-#include "themes/frappe.h"
+#include "themes/catppuccin.h"
 
 /* appearance */
 static const unsigned int borderpx  = 2;      /* border pixel of windows */
