@@ -28,16 +28,18 @@ typedef struct {
     const char *name;
     const void *cmd;
 } Sp;
-const char *spcmd0[] = { "st", "-n", "sputil0", "-g", "128x32",  NULL };
-const char *spcmd1[] = { "st", "-n", "sputil1", "-g", "96x32", NULL };
-const char *spcmd2[] = { "st", "-n", "spsound", "-g", "80x24",  "-e", "pulsemixer", NULL };
-const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "128x48", NULL };
+const char *spcmd0[] = { "st", "-n", "spbuff0", "-g", "120x40", NULL };
+const char *spcmd1[] = { "st", "-n", "spbuff1", "-g", "100x35",  NULL };
+const char *spcmd2[] = { "st", "-n", "spbuff2", "-g", "80x30", NULL };
+const char *spcmd3[] = { "st", "-n", "spsound", "-g", "100x30",  "-e", "pulsemixer", NULL };
+const char *spcmd4[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
-    { "sputil0",      spcmd0 },
-    { "sputil1",      spcmd1 },
-    { "spsound",      spcmd2 },
-    { "spemacs",      spcmd3 },
+    { "spbuff0",      spcmd0 },
+    { "spbuff1",      spcmd1 },
+    { "spbuff2",      spcmd2 },
+    { "spsound",      spcmd3 },
+    { "spemacs",      spcmd4 },
 };
 
 /* tagging */
@@ -49,10 +51,11 @@ static const Rule rules[] = {
     */
     /* class  instance    title            tags mask  isfloating  isterminal  noswallow  monitor */
     { "st",   NULL,       NULL,            0,         0,          1,          0,         -1 },
-    { NULL,   "sputil0",  NULL,            SPTAG(0),  1,          1,          0,         -1 },
-    { NULL,   "sputil1",  NULL,            SPTAG(1),  1,          1,          0,         -1 },
-    { NULL,   "spsound",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
-    { NULL,   "spemacs",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
+    { NULL,   "spbuff0",  NULL,            SPTAG(0),  1,          1,          0,         -1 },
+    { NULL,   "spbuff1",  NULL,            SPTAG(1),  1,          1,          0,         -1 },
+    { NULL,   "spbuff2",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
+    { NULL,   "spsound",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
+    { NULL,   "spemacs",  NULL,            SPTAG(4),  1,          1,          0,         -1 },
     { NULL,   NULL,       "Event Tester",  0,         0,          0,          1,         -1 }, /* xev */
 };
 
@@ -96,18 +99,18 @@ static const char *dmenucmd[] = {
     "-sb", select_bg, "-sf", select_fg,
     NULL,
 };
-static const char *clicmd[] = { "st", NULL };
-static const char *tabcmd[] = { "tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL };
-static const char *ffbcmd[] = { "firefox", NULL };
-static const char *qtbcmd[] = { "qutebrowser", NULL };
-static const char *emccmd[] = { "emacsclient", "-c", "-a", "emacs", NULL };
-static const char *scrcmd[] = { "take_screen", NULL };
-static const char *incvol[] = { "pulsemixer", "--change-volume", "+5", NULL };
-static const char *decvol[] = { "pulsemixer", "--change-volume", "-5", NULL };
-static const char *mutvol[] = { "pulsemixer", "--toggle-mute", NULL };
-static const char *mutmic[] = { "pulsemixer_micmute", NULL };
-static const char *inclit[] = { "light", "-A", "10", NULL };
-static const char *declit[] = { "light", "-U", "10", NULL };
+static const char *clicmd[] = {"st", NULL};
+static const char *tabcmd[] = {"tabbed", "-k", "-c", "-r", "2", "st",     "-w", "''", NULL};
+static const char *ffbcmd[] = {"firefox", NULL};
+static const char *qtbcmd[] = {"qutebrowser", NULL};
+static const char *emccmd[] = {"emacsclient", "-a", "emacs --daemon", "-c", NULL};
+static const char *scrcmd[] = {"take_screen", NULL};
+static const char *incvol[] = {"pulsemixer", "--change-volume", "+5", NULL};
+static const char *decvol[] = {"pulsemixer", "--change-volume", "-5", NULL};
+static const char *mutvol[] = {"pulsemixer", "--toggle-mute", NULL};
+static const char *mutmic[] = {"pulsemixer_micmute", NULL};
+static const char *inclit[] = {"light", "-A", "10", NULL};
+static const char *declit[] = {"light", "-U", "10", NULL};
 
 static const Key keys[] = {
     /* modifier                          key                       function        argument */
@@ -124,7 +127,6 @@ static const Key keys[] = {
     {  0,                            XF86XK_AudioMicMute,      spawn,          { .v = mutmic } },
     {  0,                            XF86XK_MonBrightnessUp,   spawn,          { .v = inclit } },
     {  0,                            XF86XK_MonBrightnessDown, spawn,          { .v = declit } },
-    {  MODKEY,                       XK_b,                     toggleview,     { .ui = (1<<8) } },
     {  MODKEY|ShiftMask,             XK_b,                     togglebar,      { 0 } },
     {  MODKEY,                       XK_Return,                zoom,           { 0 } },
     {  MODKEY,                       XK_comma,                 switchcol,      { 0 } },
@@ -152,10 +154,12 @@ static const Key keys[] = {
     {  MODKEY,                       XK_period,                focusmon,       { .i = +1 } },
     // {  MODKEY|ShiftMask,             XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,             XK_period,                tagmon,         { .i = +1 } },
-    {  MODKEY,                       XK_a,                     togglescratch,  { .ui = 0 } }, // sputil0
-    {  MODKEY,                       XK_semicolon,             togglescratch,  { .ui = 1 } }, // sputil1
-    {  MODKEY,                       XK_s,                     togglescratch,  { .ui = 2 } }, // spsound
-    {  MODKEY,                       XK_n,                     togglescratch,  { .ui = 3 } }, // spemacs
+    {  MODKEY,                       XK_semicolon,             togglescratch,  { .ui = 0 } }, // spbuff0
+    {  MODKEY,                       XK_a,                     togglescratch,  { .ui = 1 } }, // spbuff1
+    {  MODKEY,                       XK_b,                     togglescratch,  { .ui = 2 } }, // spbuff2
+    /* {  MODKEY,                       XK_b,                     toggleview,     { .ui = (1<<8) } }, // toggle combine current tile with tile \0 */
+    {  MODKEY,                       XK_s,                     togglescratch,  { .ui = 3 } }, // spsound
+    {  MODKEY,                       XK_n,                     togglescratch,  { .ui = 4 } }, // spemacs
     {  MODKEY,                       XK_Tab,                   view,           { 0 } },
     {  MODKEY,                       XK_0,                     view,           { .ui = ~0 } },
     {  MODKEY|ShiftMask,             XK_0,                     tag,            { .ui = ~0 } },
