@@ -9,13 +9,11 @@ static const int rmaster            = 1;      /* 1 means master-area is initiall
 static const int showbar            = 1;      /* 0 means no bar */
 static const int topbar             = 1;      /* 0 means bottom bar */
 static const int swallowfloating    = 0;      /* 1 means swallow floating windows by default */
-
 static const int showsystray             = 1; /* 0 means no systray */
 static const unsigned int systraypinning = 0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0; /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2; /* systray spacing */
 static const int systraypinningfailfirst = 1; /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor */
-
 static const char *fonts[]     = { "Iosevka Nerd Font Mono:style=Regular:pixelsize=18:antialias=true:hinting=true" };
 static const char dmenufont[]  = "Iosevka Nerd Font Mono:style=Regular:pixelsize=18:antialias=true:hinting=true";
 static const char *colors[][3] = {
@@ -28,16 +26,16 @@ typedef struct {
     const char *name;
     const void *cmd;
 } Sp;
-const char *spcmd0[] = { "st", "-n", "spbuff0", "-g", "120x40", NULL };
-const char *spcmd1[] = { "st", "-n", "spbuff1", "-g", "100x35",  NULL };
-const char *spcmd2[] = { "st", "-n", "spbuff2", "-g", "80x30", NULL };
+const char *spcmd0[] = { "st", "-n", "spbuff0", "-g", "100x35",  NULL };
+const char *spcmd1[] = { "st", "-n", "spbuff1", "-g", "120x40", NULL };
+const char *spcmd2[] = { "st", "-n", "spfloat", "-g", "80x30", NULL };
 const char *spcmd3[] = { "st", "-n", "spsound", "-g", "100x30",  "-e", "pulsemixer", NULL };
 const char *spcmd4[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
     { "spbuff0",      spcmd0 },
     { "spbuff1",      spcmd1 },
-    { "spbuff2",      spcmd2 },
+    { "spfloat",      spcmd2 },
     { "spsound",      spcmd3 },
     { "spemacs",      spcmd4 },
 };
@@ -53,7 +51,7 @@ static const Rule rules[] = {
     { "st",   NULL,       NULL,            0,         0,          1,          0,         -1 },
     { NULL,   "spbuff0",  NULL,            SPTAG(0),  1,          1,          0,         -1 },
     { NULL,   "spbuff1",  NULL,            SPTAG(1),  1,          1,          0,         -1 },
-    { NULL,   "spbuff2",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
+    { NULL,   "spfloat",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
     { NULL,   "spsound",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
     { NULL,   "spemacs",  NULL,            SPTAG(4),  1,          1,          0,         -1 },
     { NULL,   NULL,       "Event Tester",  0,         0,          0,          1,         -1 }, /* xev */
@@ -154,10 +152,10 @@ static const Key keys[] = {
     {  MODKEY,                       XK_period,                focusmon,       { .i = +1 } },
     // {  MODKEY|ShiftMask,             XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,             XK_period,                tagmon,         { .i = +1 } },
+    {  MODKEY,                       XK_b,                     toggleview,     { .ui = (1<<8) } }, // \0
     {  MODKEY,                       XK_semicolon,             togglescratch,  { .ui = 0 } }, // spbuff0
     {  MODKEY,                       XK_a,                     togglescratch,  { .ui = 1 } }, // spbuff1
-    {  MODKEY,                       XK_b,                     togglescratch,  { .ui = 2 } }, // spbuff2
-    /* {  MODKEY,                       XK_b,                     toggleview,     { .ui = (1<<8) } }, // toggle combine current tile with tile \0 */
+    {  MODKEY,                       XK_v,                     togglescratch,  { .ui = 2 } }, // spfloat
     {  MODKEY,                       XK_s,                     togglescratch,  { .ui = 3 } }, // spsound
     {  MODKEY,                       XK_n,                     togglescratch,  { .ui = 4 } }, // spemacs
     {  MODKEY,                       XK_Tab,                   view,           { 0 } },
