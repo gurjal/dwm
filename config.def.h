@@ -28,16 +28,14 @@ typedef struct {
 } Sp;
 const char *spcmd0[] = { "st", "-n", "spbuff0", "-g", "100x35",  NULL };
 const char *spcmd1[] = { "st", "-n", "spbuff1", "-g", "120x40", NULL };
-const char *spcmd2[] = { "st", "-n", "spfloat", "-g", "80x30", NULL };
-const char *spcmd3[] = { "st", "-n", "spsound", "-g", "100x30",  "-e", "pulsemixer", NULL };
-const char *spcmd4[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
+const char *spcmd2[] = { "st", "-n", "spsound", "-g", "100x30",  "-e", "pulsemixer", NULL };
+const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
     { "spbuff0",      spcmd0 },
     { "spbuff1",      spcmd1 },
-    { "spfloat",      spcmd2 },
-    { "spsound",      spcmd3 },
-    { "spemacs",      spcmd4 },
+    { "spsound",      spcmd2 },
+    { "spemacs",      spcmd3 },
 };
 
 /* tagging */
@@ -51,9 +49,8 @@ static const Rule rules[] = {
     { "st",   NULL,       NULL,            0,         0,          1,          0,         -1 },
     { NULL,   "spbuff0",  NULL,            SPTAG(0),  1,          1,          0,         -1 },
     { NULL,   "spbuff1",  NULL,            SPTAG(1),  1,          1,          0,         -1 },
-    { NULL,   "spfloat",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
-    { NULL,   "spsound",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
-    { NULL,   "spemacs",  NULL,            SPTAG(4),  1,          1,          0,         -1 },
+    { NULL,   "spsound",  NULL,            SPTAG(2),  1,          1,          0,         -1 },
+    { NULL,   "spemacs",  NULL,            SPTAG(3),  1,          1,          0,         -1 },
     { NULL,   NULL,       "Event Tester",  0,         0,          0,          1,         -1 }, /* xev */
 };
 
@@ -125,7 +122,7 @@ static const Key keys[] = {
     {  0,                            XF86XK_AudioMicMute,      spawn,          { .v = mutmic } },
     {  0,                            XF86XK_MonBrightnessUp,   spawn,          { .v = inclit } },
     {  0,                            XF86XK_MonBrightnessDown, spawn,          { .v = declit } },
-    {  MODKEY|ShiftMask,             XK_b,                     togglebar,      { 0 } },
+    {  MODKEY,                       XK_b,                     togglebar,      { 0 } },
     {  MODKEY,                       XK_Return,                zoom,           { 0 } },
     {  MODKEY,                       XK_comma,                 switchcol,      { 0 } },
     {  MODKEY,                       XK_j,                     focusstack,     { .i = +1 } },
@@ -152,12 +149,11 @@ static const Key keys[] = {
     {  MODKEY,                       XK_period,                focusmon,       { .i = +1 } },
     // {  MODKEY|ShiftMask,             XK_comma,                 tagmon,         { .i = -1 } },
     {  MODKEY|ShiftMask,             XK_period,                tagmon,         { .i = +1 } },
-    {  MODKEY,                       XK_b,                     toggleview,     { .ui = (1<<8) } }, // \0
+    {  MODKEY,                       XK_n,                     toggleview,     { .ui = (1<<8) } }, // \0
     {  MODKEY,                       XK_semicolon,             togglescratch,  { .ui = 0 } }, // spbuff0
     {  MODKEY,                       XK_a,                     togglescratch,  { .ui = 1 } }, // spbuff1
-    {  MODKEY,                       XK_v,                     togglescratch,  { .ui = 2 } }, // spfloat
-    {  MODKEY,                       XK_s,                     togglescratch,  { .ui = 3 } }, // spsound
-    {  MODKEY,                       XK_n,                     togglescratch,  { .ui = 4 } }, // spemacs
+    {  MODKEY,                       XK_s,                     togglescratch,  { .ui = 2 } }, // spsound
+    {  MODKEY,                       XK_z,                     togglescratch,  { .ui = 3 } }, // spemacs
     {  MODKEY,                       XK_Tab,                   view,           { 0 } },
     {  MODKEY,                       XK_0,                     view,           { .ui = ~0 } },
     {  MODKEY|ShiftMask,             XK_0,                     tag,            { .ui = ~0 } },
@@ -192,6 +188,8 @@ static const Button buttons[] = {
     {  ClkClientWin,        MODKEY,         Button1,        movemouse,      { 0 } },
     {  ClkClientWin,        MODKEY,         Button2,        togglefloating, { 0 } },
     {  ClkClientWin,        MODKEY,         Button3,        resizemouse,    { 0 } },
+    {  ClkClientWin,        0,              9,              movemouse,      { 0 } },
+    {  ClkClientWin,        0,              8,              resizemouse,    { 0 } },
     {  ClkStatusText,       0,              Button1,        spawn,          { .v = clicmd } },
     {  ClkStatusText,       0,              Button2,        spawn,          { .v = ffbcmd } },
 };
