@@ -81,7 +81,8 @@ static const MonitorRule monrules[] = {
     { MODKEY,                       KEY,      view,       { .ui = 1 << TAG } },\
     { MODKEY|ControlMask,           KEY,      toggleview, { .ui = 1 << TAG } },\
     { MODKEY|ShiftMask,             KEY,      tag,        { .ui = 1 << TAG } },\
-    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,  { .ui = 1 << TAG } },
+    { MODKEY|Mod1Mask,              KEY,      toggletag,  { .ui = 1 << TAG } },
+    /* { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,  { .ui = 1 << TAG } }, */
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -108,10 +109,10 @@ static const char *inclit[] = {"light", "-A", "10", NULL};
 static const char *declit[] = {"light", "-U", "10", NULL};
 
 static const Key keys[] = {
-    /* modifier                          key                       function        argument */
+    /* modifier                      key                       function        argument */
     {  MODKEY,                       XK_p,                     spawn,          { .v = dmenucmd } },
     {  MODKEY|ShiftMask,             XK_Return,                spawn,          { .v = clicmd } },
-    {  MODKEY|ShiftMask|ControlMask, XK_Return,                spawn,          { .v = tabcmd } },
+    {  MODKEY|Mod1Mask,              XK_Return,                spawn,          { .v = tabcmd } },
     {  MODKEY|ShiftMask,             XK_i,                     spawn,          { .v = ffbcmd } },
     {  MODKEY|ControlMask,           XK_i,                     spawn,          { .v = qtbcmd } },
     {  MODKEY,                       XK_e,                     spawn,          { .v = emccmd } },
