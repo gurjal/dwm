@@ -5,17 +5,17 @@
 /* appearance */
 static const unsigned int borderpx  = 2;      /* border pixel of windows */
 static const unsigned int snap      = 5;     /* snap pixel */
-static const int rmaster            = 0;      /* 1 means master-area is initially on the right */
+static const int rmaster            = 1;      /* 1 means master-area is initially on the right */
 static const int showbar            = 1;      /* 0 means no bar */
 static const int topbar             = 1;      /* 0 means bottom bar */
 static const int swallowfloating    = 0;      /* 1 means swallow floating windows by default */
 static const int showsystray             = 1; /* 0 means no systray */
 static const unsigned int systraypinning = 0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0; /* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 2; /* systray spacing */
+static const unsigned int systrayspacing = 1; /* systray spacing */
 static const int systraypinningfailfirst = 1; /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor */
-static const char *fonts[]     = { "Iosevka Nerd Font Mono:style=Regular:pixelsize=18:antialias=true:hinting=true" };
-static const char dmenufont[]  = "Iosevka Nerd Font Mono::style=Regular:pixelsize=18:antialias=true:hinting=true";
+static const char *fonts[]     = { "Iosevka Nerd Font Propo:style=Regular:pixelsize=16" };
+static const char dmenufont[]  = "Iosevka Nerd Font Propo::style=Regular:pixelsize=16";
 static const char *colors[][3] = {
     /*               fg         bg         border   */
     [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -55,7 +55,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact        = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact        = 0.45; /* factor of master area size [0.05..0.95] */
 static const int nmaster        = 1;    /* number of clients in master area */
 static const int resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0;    /* 1 will force focus on the fullscreen window */
@@ -71,7 +71,7 @@ static const Layout layouts[] = {
 
 static const MonitorRule monrules[] = {
     /* monitor  tag  layout  mfact  nmaster  showbar  topbar */
-    {  -1,       9,  1,      -1,    -1,      -1,      -1     }, // using tag 9 as null layout buffer area
+    {  -1,       9,  1,      -1,    -1,      -1,      -1     }, // null buffer (tag 9)
     {  -1,      -1,  0,      -1,    -1,      -1,      -1     }, // default
 };
 
@@ -79,9 +79,9 @@ static const MonitorRule monrules[] = {
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG)\
     { MODKEY,                       KEY,      view,       { .ui = 1 << TAG } },\
-    { MODKEY|ControlMask,           KEY,      toggleview, { .ui = 1 << TAG } },\
+    { MODKEY|Mod1Mask,              KEY,      toggleview, { .ui = 1 << TAG } },\
     { MODKEY|ShiftMask,             KEY,      tag,        { .ui = 1 << TAG } },\
-    { MODKEY|Mod1Mask,              KEY,      toggletag,  { .ui = 1 << TAG } },
+    { MODKEY|ControlMask,           KEY,      toggletag,  { .ui = 1 << TAG } },
 
 /* TODO helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
