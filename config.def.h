@@ -130,6 +130,7 @@ static const Key keys[] = {
     {  MODKEY,                       XK_Right,                 spawn,          { .v = mpdpos } },
     {  MODKEY,                       XK_b,                     togglebar,      { 0 } },
     {  MODKEY,                       XK_Return,                zoom,           { 0 } },
+    {  MODKEY,                       XK_c,                     switchcol,      { 0 } },
     {  MODKEY,                       XK_comma,                 switchcol,      { 0 } },
     {  MODKEY,                       XK_j,                     focusstack,     { .i = +1 } },
     {  MODKEY,                       XK_k,                     focusstack,     { .i = -1 } },
