@@ -190,6 +190,7 @@ static const Button buttons[] = {
     {  ClkLtSymbol,         MODKEY,         Button3,        setlayout,      { .v = &layouts[2] } },
     {  ClkWinTitle,         0,              Button1,        zoom,           { 0 } },
     {  ClkWinTitle,         0,              Button2,        killclient,     { 0 } },
+    {  ClkWinTitle,         0,              Button3,        togglefloating, { 0 } },
     {  ClkWinTitle,         0,              Button4,        focusstack,     { .i = +1 } },
     {  ClkWinTitle,         0,              Button5,        focusstack,     { .i = -1 } },
     {  ClkClientWin,        MODKEY,         Button1,        movemouse,      { 0 } },
