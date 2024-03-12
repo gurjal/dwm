@@ -3,19 +3,19 @@
 #include "themes/catppuccin.h"
 
 /* appearance */
-static const unsigned int borderpx  = 2;      /* border pixel of windows */
-static const unsigned int snap      = 5;     /* snap pixel */
-static const int rmaster            = 1;      /* 1 means master-area is initially on the right */
-static const int showbar            = 1;      /* 0 means no bar */
-static const int topbar             = 1;      /* 0 means bottom bar */
-static const int swallowfloating    = 0;      /* 1 means swallow floating windows by default */
+static const unsigned int borderpx       = 2; /* border pixel of windows */
+static const unsigned int snap           = 5; /* snap pixel */
+static const int rmaster                 = 1; /* 1 means master-area is initially on the right */
+static const int showbar                 = 1; /* 0 means no bar */
+static const int topbar                  = 1; /* 0 means bottom bar */
+static const int swallowfloating         = 0; /* 1 means swallow floating windows by default */
 static const int showsystray             = 1; /* 0 means no systray */
 static const unsigned int systraypinning = 0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0; /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 1; /* systray spacing */
 static const int systraypinningfailfirst = 1; /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor */
-static const char *fonts[]     = { "Iosevka Nerd Font Propo:style=Regular:pixelsize=16" };
-static const char dmenufont[]  = "Iosevka Nerd Font Propo::style=Regular:pixelsize=16";
+static const char *fonts[]     = { "Iosevka Nerd Font Propo:style=Regular:pixelsize=18" };
+static const char dmenufont[]  = "Iosevka Nerd Font Propo::style=Regular:pixelsize=18";
 static const char *colors[][3] = {
     /*               fg         bg         border   */
     [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
@@ -29,13 +29,15 @@ typedef struct {
 const char *spcmd0[] = { "st", "-n", "spbuff0", "-g", "100x35",  NULL };
 const char *spcmd1[] = { "st", "-n", "spbuff1", "-g", "120x40", NULL };
 const char *spcmd2[] = { "st", "-n", "spsound", "-g", "100x30",  "-e", "pulsemixer", NULL };
-const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
+// emacs scratchpad
+// const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
+// const char *spcmd3[] = { "emacs", "--name=spemacs", "-g", "130x50", NULL };
 static Sp scratchpads[] = {
     /* name           cmd */
     { "spbuff0",      spcmd0 },
     { "spbuff1",      spcmd1 },
     { "spsound",      spcmd2 },
-    { "spemacs",      spcmd3 },
+//    { "spemacs",      spcmd3 },
 };
 
 /* tagging */
@@ -95,7 +97,7 @@ static const char *dmenucmd[] = {
     NULL,
 };
 static const char *clicmd[] = {"st", NULL};
-static const char *tabcmd[] = {"tabbed", "-k", "-c", "-r", "2", "st",     "-w", "''", NULL};
+/* static const char *tabcmd[] = {"tabbed", "-k", "-c", "-r", "2", "st", "-w", "''", NULL}; */
 static const char *ffbcmd[] = {"firefox", NULL};
 static const char *qtbcmd[] = {"qutebrowser", NULL};
 static const char *emccmd[] = {"emacsclient", "-a", "emacs --daemon", "-c", NULL};
@@ -114,7 +116,7 @@ static const Key keys[] = {
     /* modifier                      key                       function        argument */
     {  MODKEY,                       XK_p,                     spawn,          { .v = dmenucmd } },
     {  MODKEY|ShiftMask,             XK_Return,                spawn,          { .v = clicmd } },
-    {  MODKEY|Mod1Mask,              XK_Return,                spawn,          { .v = tabcmd } },
+    /* {  MODKEY|Mod1Mask,              XK_Return,                spawn,          { .v = tabcmd } }, */
     {  MODKEY|ShiftMask,             XK_i,                     spawn,          { .v = ffbcmd } },
     {  MODKEY|ControlMask,           XK_i,                     spawn,          { .v = qtbcmd } },
     {  MODKEY,                       XK_e,                     spawn,          { .v = emccmd } },
@@ -179,26 +181,24 @@ static const Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-    /* click                event mask      button          function        argument */
-    {  ClkTagBar,           0,              Button1,        view,           { 0 } },
-    {  ClkTagBar,           0,              Button2,        tag,            { 0 } },
-    {  ClkTagBar,           0,              Button3,        toggleview,     { 0 } },
-    {  ClkTagBar,           MODKEY,         Button1,        tag,            { 0 } },
-    {  ClkTagBar,           MODKEY,         Button3,        toggletag,      { 0 } },
-    {  ClkLtSymbol,         MODKEY,         Button1,        setlayout,      { .v = &layouts[0] } },
-    {  ClkLtSymbol,         MODKEY,         Button2,        setlayout,      { .v = &layouts[1] } },
-    {  ClkLtSymbol,         MODKEY,         Button3,        setlayout,      { .v = &layouts[2] } },
-    {  ClkWinTitle,         0,              Button1,        zoom,           { 0 } },
-    {  ClkWinTitle,         0,              Button2,        killclient,     { 0 } },
-    {  ClkWinTitle,         0,              Button3,        togglefloating, { 0 } },
-    {  ClkWinTitle,         0,              Button4,        focusstack,     { .i = +1 } },
-    {  ClkWinTitle,         0,              Button5,        focusstack,     { .i = -1 } },
-    {  ClkClientWin,        MODKEY,         Button1,        movemouse,      { 0 } },
-    {  ClkClientWin,        MODKEY,         Button2,        togglefloating, { 0 } },
-    {  ClkClientWin,        MODKEY,         Button3,        resizemouse,    { 0 } },
-    {  ClkClientWin,        MODKEY|ShiftMask, Button1,      resizemouse,    { 0 } },
-    {  ClkClientWin,        0,              9,              movemouse,      { 0 } },
-    {  ClkClientWin,        0,              8,              resizemouse,    { 0 } },
-    {  ClkStatusText,       0,              Button1,        spawn,          { .v = clicmd } },
-    {  ClkStatusText,       0,              Button2,        spawn,          { .v = ffbcmd } },
+    /* click             event mask           button      function          argument */
+    {  ClkTagBar,        0,                   Button1,    view,             { 0 } },
+    {  ClkTagBar,        0,                   Button2,    tag,              { 0 } },
+    {  ClkTagBar,        0,                   Button3,    toggleview,       { 0 } },
+    {  ClkTagBar,        MODKEY,              Button1,    tag,              { 0 } },
+    {  ClkTagBar,        MODKEY,              Button3,    toggletag,        { 0 } },
+    {  ClkLtSymbol,      0,                   Button1,    setlayout,        { .v = &layouts[0] } },
+    {  ClkLtSymbol,      0,                   Button2,    togglermaster,    { 0 } },
+    {  ClkLtSymbol,      0,                   Button3,    setlayout,        { .v = &layouts[2] } },
+    {  ClkWinTitle,      0,                   Button1,    zoom,             { 0 } },
+    {  ClkWinTitle,      0,                   Button2,    killclient,       { 0 } },
+    {  ClkWinTitle,      0,                   Button3,    togglefloating,   { 0 } },
+    {  ClkWinTitle,      0,                   Button4,    focusstack,       { .i = +1 } },
+    {  ClkWinTitle,      0,                   Button5,    focusstack,       { .i = -1 } },
+    {  ClkClientWin,     MODKEY,              Button1,    movemouse,        { 0 } },
+    {  ClkClientWin,     MODKEY,              Button2,    togglefloating,   { 0 } },
+    {  ClkClientWin,     MODKEY,              Button3,    resizemouse,      { 0 } },
+    {  ClkClientWin,     MODKEY|ShiftMask,    Button1,    resizemouse,      { 0 } },
+    {  ClkStatusText,    0,                   Button1,    spawn,            { .v = clicmd } },
+    {  ClkStatusText,    0,                   Button3,    spawn,            { .v = qtbcmd } },
 };

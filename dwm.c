@@ -354,6 +354,8 @@ struct Pertag {
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
 	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+    //TODO: make Pertag struct aware of the tagstack rmaster values via rmasters array
+	//Bool rmasters[LENGTH(tags) + 1]; /* master-area is on the right */
 	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
 };
 
