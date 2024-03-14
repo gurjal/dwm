@@ -69,6 +69,8 @@ static const Layout layouts[] = {
     { "[M]",   monocle },
     { "[D]",   deck },
     { "###",   nrowgrid },
+    { "|M|",   centeredmaster },
+    { ">M>",   centeredfloatingmaster },
 };
 
 static const MonitorRule monrules[] = {
@@ -132,7 +134,6 @@ static const Key keys[] = {
     {  MODKEY,                       XK_Right,                 spawn,          { .v = mpdpos } },
     {  MODKEY,                       XK_b,                     togglebar,      { 0 } },
     {  MODKEY,                       XK_Return,                zoom,           { 0 } },
-    {  MODKEY,                       XK_c,                     switchcol,      { 0 } },
     {  MODKEY,                       XK_comma,                 switchcol,      { 0 } },
     {  MODKEY,                       XK_j,                     focusstack,     { .i = +1 } },
     {  MODKEY,                       XK_k,                     focusstack,     { .i = -1 } },
@@ -140,8 +141,8 @@ static const Key keys[] = {
     {  MODKEY,                       XK_o,                     incnmaster,     { .i = -1 } },
     {  MODKEY,                       XK_h,                     setmfact,       { .f = -0.05 } },
     {  MODKEY,                       XK_l,                     setmfact,       { .f = +0.05 } },
-    {  MODKEY|ShiftMask,             XK_h,                     setcfact,       { .f = -0.01 } },
-    {  MODKEY|ShiftMask,             XK_l,                     setcfact,       { .f = +0.01 } },
+    {  MODKEY|ShiftMask,             XK_h,                     setcfact,       { .f = -0.05 } },
+    {  MODKEY|ShiftMask,             XK_l,                     setcfact,       { .f = +0.05 } },
     {  MODKEY|ShiftMask,             XK_o,                     setcfact,       { .f =  0.00 } },
     {  MODKEY|ShiftMask,             XK_j,                     movestack,      { .i = +1 } },
     {  MODKEY|ShiftMask,             XK_k,                     movestack,      { .i = -1 } },
@@ -151,6 +152,8 @@ static const Key keys[] = {
     {  MODKEY,                       XK_m,                     setlayout,      { .v = &layouts[2] } }, // monocle
     {  MODKEY,                       XK_d,                     setlayout,      { .v = &layouts[3] } }, // deck
     {  MODKEY,                       XK_g,                     setlayout,      { .v = &layouts[4] } }, // grid
+    {  MODKEY,                       XK_c,                     setlayout,      { .v = &layouts[5] } }, // centeredmaster
+    {  MODKEY,                       XK_v,                     setlayout,      { .v = &layouts[6] } }, // centeredfloatingmaster
     {  MODKEY,                       XK_r,                     togglermaster,  { 0 } },
     {  MODKEY,                       XK_space,                 setlayout,      { 0 } },
     {  MODKEY|ShiftMask,             XK_space,                 togglefloating, { 0 } },
