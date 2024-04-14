@@ -15,7 +15,7 @@ static const unsigned int systrayonleft  = 0; /* 0: systray in the right corner,
 static const unsigned int systrayspacing = 1; /* systray spacing */
 static const int systraypinningfailfirst = 1; /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor */
 static const char *fonts[]     = { "Iosevka Nerd Font Propo:style=Regular:pixelsize=18" };
-static const char dmenufont[]  = "Iosevka Nerd Font Propo::style=Regular:pixelsize=18";
+static const char dmenufont[]  = "Iosevka Nerd Font Propo:style=Regular:pixelsize=18";
 static const char *colors[][3] = {
     /*               fg         bg         border   */
     [SchemeNorm] = { normal_fg, normal_bg, normal_bd },
